@@ -1,6 +1,6 @@
 layout: page
-title: "Check First Page"
-permalink: /check/firstpage
+title: "Check"
+permalink: /check/firstpage/
 
 ## This is a check page
 # In this page I check everything
