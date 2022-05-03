@@ -414,9 +414,13 @@ section {
 			transform: scale(0);
 			transition: all .4s ease-in-out;
 			h3{
-				font-size: 1.5rem;
+				font-size: 1rem;
 				color: var(--color-white);
 				margin-bottom: 1.5rem;
+			}
+			h4{
+				margin-bottom: 2rem;
+				font-size: 3rem;
 			}
 			.icons{
 				display: flex;
@@ -564,7 +568,6 @@ section {
 			transform: translateX(0);
 		}
 	}
-	
 }
 
 .main-title{

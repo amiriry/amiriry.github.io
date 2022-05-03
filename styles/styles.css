@@ -410,9 +410,13 @@ section {
   transition: all 0.4s ease-in-out;
 }
 .portfolios .portfolio-item .hover-items h3 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: var(--color-white);
   margin-bottom: 1.5rem;
+}
+.portfolios .portfolio-item .hover-items h4 {
+  margin-bottom: 2rem;
+  font-size: 3rem;
 }
 .portfolios .portfolio-item .hover-items .icons {
   display: flex;
@@ -503,6 +507,12 @@ section {
 .contact-context-con {
   display: flex;
   padding-top: 3.5rem;
+}
+.contact-context-con .left-contact {
+  flex: 2;
+}
+.contact-context-con .right-contact {
+  flex: 3;
 }
 
 .btn-con {
