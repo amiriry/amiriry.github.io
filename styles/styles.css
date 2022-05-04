@@ -184,6 +184,34 @@ section {
 .header-content .right-header .name span {
   color: var(--color-secondary);
 }
+.header-content .right-header .header-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header-content .right-header .header-icons .icon {
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+.header-content .right-header .header-icons .icon i {
+  font-size: 1.5rem;
+  color: var(--color-white);
+  margin: 0 1rem;
+}
+.header-content .right-header .header-icons .icon:hover {
+  background-color: var(--color-white);
+}
+.header-content .right-header .header-icons .icon:hover i {
+  color: var(--color-primary);
+}
 
 .about-container {
   display: grid;
@@ -418,6 +446,10 @@ section {
   margin-bottom: 2rem;
   font-size: 3rem;
 }
+.portfolios .portfolio-item .hover-items h5 {
+  margin-bottom: 1rem;
+  font-size: 0.7rem;
+}
 .portfolios .portfolio-item .hover-items .icons {
   display: flex;
   justify-content: center;
@@ -511,8 +543,89 @@ section {
 .contact-context-con .left-contact {
   flex: 2;
 }
+.contact-context-con .left-contact h4 {
+  margin-top: 1rem;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+.contact-context-con .left-contact p {
+  margin: 1rem 0;
+  line-height: 2rem;
+}
+.contact-context-con .left-contact .contact-info .contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.contact-context-con .left-contact .contact-info .contact-item p {
+  margin: 0.3rem 0 !important;
+  padding: 0 !important;
+}
+.contact-context-con .left-contact .contact-info .contact-item .icon {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+}
+.contact-context-con .left-contact .contact-info .contact-item .icon i {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+.contact-context-con .left-contact .contact-icon {
+  display: flex;
+  margin-top: 2rem;
+}
+.contact-context-con .left-contact .contact-icon a {
+  display: flex;
+  align-items: center;
+  color: var(--color-white);
+  background-color: var(--color-grey-5);
+  cursor: pointer;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 0.4rem;
+  transition: all 0.4s ease-in-out;
+}
+.contact-context-con .left-contact .contact-icon a:hover {
+  background-color: var(--color-secondary);
+}
+.contact-context-con .left-contact .contact-icon a:hover i {
+  color: var(--color-primary);
+}
+.contact-context-con .left-contact .contact-icon a i {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
 .contact-context-con .right-contact {
   flex: 3;
+  margin-left: 3rem;
+}
+.contact-context-con .right-contact .input-control {
+  margin: 1.5rem 0;
+}
+.contact-context-con .right-contact .input-control input, .contact-context-con .right-contact .input-control textarea {
+  border-radius: 30px;
+  font-weight: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.8rem 1.1rem;
+  outline: none;
+  border: none;
+  background-color: var(--color-grey-5);
+  width: 100%;
+  resize: none;
+}
+.contact-context-con .right-contact .i-c-2 {
+  display: flex;
+}
+.contact-context-con .right-contact .i-c-2 :last-child {
+  margin-left: 1.5rem;
+}
+.contact-context-con .right-contact .submit-btn {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .btn-con {
