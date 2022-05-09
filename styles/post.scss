@@ -84,6 +84,13 @@ body {
 	}
 }
 
+a{
+	color: rgb(255,55,0);
+	&:hover{
+		color: rgb(255,255,0);
+	}
+}
+
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */

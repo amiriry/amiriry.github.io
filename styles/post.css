@@ -85,6 +85,13 @@ body {
   color: var(--color-primary);
 }
 
+a {
+  color: rgb(255, 55, 0);
+}
+a:hover {
+  color: rgb(255, 255, 0);
+}
+
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
