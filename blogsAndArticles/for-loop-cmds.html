@@ -4,6 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>For loop in a command</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="../styles/post.css">
 </head>
 <div class="header"><h2>Use 'for' loop in a command</h2></div>
@@ -61,7 +62,7 @@ You can use this method in a lot of placements where you need a little loop, or 
 
 <h4>Examples</h5>
 Doing things on specific pods:<br>
-<span class="code">for s in $(kubectl get pods | awk '{print $1}' | egrep "pod1|pod2...");do echo $s:; kubectl logs 1s;echo;done</span><br>
+<span class="code">for s in $(kubectl get pods | awk '{print $1}' | egrep "pod1|pod2...");do echo $s:; kubectl logs $s;echo;done</span><br>
 
 Check if a file exists in an archive file:
 <span class="code">for f in $(tar -tvf mytar.tar.gz | awk '{print $6}' | awk -F'/' '{print $NF}'); do echo $f:;if [ ! -z $(ls ../directory/ | grep $f)   ];then echo exits;else echo DONT EXIST;fi;done')</span><br>
@@ -69,4 +70,5 @@ Check if a file exists in an archive file:
 Give variable to the for loop and do something with it. In this case, give a string of pods names that you want to do something on:
 <span class="code">read -p "pods:" pods;pods=$(echo ${pods} | sed 's/ /|/g') && read -p "command:" command && for s in $(kubectl get pods | awk -v awkvar="$pods" '$1 ~ awkvar {print $1}');do kubectl $command pod $s;echo;done</span><br>
 
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
 </body>
