@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create A Command</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../styles/post.css">
+</head>
+<div class="header"><h2>Control The computer with one command</h2></div>
+<body>
+
+<p>
+<h4>Create Your Own Command - Control Everything With It</h4>
+</p>
+
+<p>
+Everyone that use linux knows about the function of scripts - Do regular repeated stuff. <br>
+What about a lot very small things that you do a lot but that don't live in one continuoum? <br>
+Like for example:<br>
+If you have a lot of directories that you enter regularly and live in a very long path that you have to remember and anyway yse TAB to autocomplete.<br>
+Specific Examples: <br>
+You have:<br>
+Project directory that lives in <span class="code">/home/username/work/projects/devops/ci/jenkins/project_name</span><br>
+More general information on your work and tasks that lives in <span class="code">/home/username/Documents/work/projects/project_name</span><br>
+General scripts for daily use in <span class="code">/home/username/bin</span><br>
+And a lot more...
+</p>
+You don't remember all paths, and you don't want to press <TAB> for each directory, because if you have 2 directories with the same prefix it starts to be a problem and if you have a lot more than 2 it becomes realy frustrating.<br>
+So what's the solution?<br>
+<h4>Create a command with automcompletion that does everything for you</h4>
+<hr>
+First of all you want the script to be autocompleted in the easiest way. <br>
+What do I mean by that?<br>
+You want the script name to start with letters that no other command have. Like if its starts with ls, you will have a lot commands what can be autocompeted to.<br>
+Second you want it to be written easily. So a line in the keyboad will be a good solution.<br>
+I chose to call the command <span class="code">poiuytrewq</span> <br>
+No other command starts with 'poi', it in the basic linux commands, so it will be autocompleted, very easy.<br>
+Second, if I do need to write it, or remember it, it is very easy to remember and write.If I create another script/command that starts with 'poi' it will never be a straight line. <br>
+
+What do I mean by that?<br>
+Let's assume you have a script that does 'goto' to the paths above <br>
+project
+So the commands will be:<br>
+<span class="code">poiuytrewq goto projectsdevops</span><br> 
+<span class="code">poiuytrewq goto projectsinfo</span><br> 
+<span class="code">poiuytrewq goto mycommands</span><br> 
+So to get to devops projects dir you only have to do<br> 
+<span class="code">poi + TAB + g + TAB + p + TAB + d + TAB</span><br> 
+To get to documents of projects <br> 
+<span class="code">poi + TAB + g + TAB + p + TAB + i + TAB</span><br> 
+To get to commands <br> 
+<span class="code">poi + TAB + g + TAB + c + TAB</span> <br> 
+
+Examples of how to do that: <a href="https://github.com/amiriry/Linux/tree/main/autocompletion">example</a>
+
+
+
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>

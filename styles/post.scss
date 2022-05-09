@@ -60,6 +60,30 @@ body {
 	margin-left: 100px;
 }
 
+.back,blogs{
+	display: flex;
+	margin-left: 50%;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-primary);
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	cursor: pointer;
+	transition: all .4s ease-in-out;
+	i{
+		font-size: 2rem;
+		color: var(--color-white);
+		margin: 0 1rem;
+	}
+	&:hover{
+		background-color: var(--color-white);
+		i{
+			color: var(--color-primary);
+		}
+	}
+}
+
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
