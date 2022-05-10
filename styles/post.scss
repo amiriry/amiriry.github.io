@@ -52,6 +52,21 @@ body {
   background-color: var(--color-grey-3);
   line-height: 1.2;
 }
+
+.file {
+  color: black;
+  display: inline-block;
+  box-sizing: border-box;
+  background-color: white;
+  width: auto;
+  margin: 15px;
+  margin-left: 0px;
+  border: 4px solid rgb(174,174,174);
+  padding: 8px 12px;
+  line-height: 1.2;
+}
+
+
 .for,line2{
 	margin-left: 150px;
 }
@@ -84,12 +99,27 @@ body {
 	}
 }
 
+.names1{
+	color: red;
+	text-decoration: underline;
+	&:hover{
+		color: rgb(99,255,20);
+	}
+}
+
+.command{
+	color: white;
+
+}
+
 a{
 	color: rgb(255,55,0);
 	&:hover{
 		color: rgb(255,255,0);
 	}
 }
+
+
 
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */

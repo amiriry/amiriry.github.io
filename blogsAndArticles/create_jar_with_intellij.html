@@ -1,0 +1,117 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jar file with intellij</title>
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="stylesheet" href="../styles/create_jar_with_intellij.css">
+</head>
+<div class="header"><h2>Create Jar File With Intellij</h2></div>
+<body>
+
+<p>
+<h4>Create Jar file with intellij in the most easiest way</h4>
+<p>
+<p>
+You know how everythin in linux is file?<br>
+So its indeed true.
+I tried to create a huge jar with a lot of dependencies from the maven local repository(Extracted dir), which I had to go and bring one by one<br>
+The names of the dependencies I needed: <br>
+<div class="code">
+	spring-boot-2.5.0 <br>
+	logback-classic-1.1.11 <br>
+	logback-core-1.1.11 <br>
+	aws-lambda-java-core-1.2.0 <br>
+	aws-serverless-java-container-core-1.0 <br>
+	aws-serverless-java-container-spring-1.0 <br>
+	classmate-1.3.4 <br>
+	jackson-annotations-2.13.1 <br>
+	jackson-core-2.13.1 <br>
+	jackson-databind-2.13.1 <br>
+	jackson-module-afterburner-2.12.3 <br>
+	commons-fileupload-1.3.3 <br>
+	commons-io-2.2 <br>
+	javax.servlet-api-3.1.0 <br>
+	javax.ws.rs-api-2.1 <br>
+	httpcore-4.4.14 <br>
+	tomcat-embed-core-8.5.27 <br>
+	tomcat-embed-el-8.5.27 <br>
+	tomcat-embed-websocket-8.5.27 <br>
+	tomcat-annotations-api-8.5.27 <br>
+	jcl-over-slf4j-1.7.25 <br>
+	jul-to-slf4j-1.7.25 <br>
+	log4j-over-slf4j-1.7.25 <br>
+	slf4j-api-1.7.25 <br>
+	spring-web-5.3.7 <br>
+	snakeyaml-1.17 <br>
+	spring-core-5.3.7 <br>
+</div><br>
+First of all they need to be downloaded from maven repo to the local repo. When you are using intellij its very easy, search for them in the <a href="https://mvnrepository.com/" target="_blank">Maven Repository</a><br> 
+Add the dependency snippets in pom.xml file in your project:<br>
+<div class="code">
+&lt;dependency><br>
+	&ensp;&lt;groupId>net.sourceforge.nekohtml&lt;/groupId><br>
+	&ensp;&lt;artifactId>nekohtml&lt;/artifactId><br>
+	&ensp;&lt;version>1.9.22&lt;/version><br>
+&lt;/depdendency><br>
+</div><br>
+And press the button for 'Load maven changes' which is<br> 
+<img src="../img/LoadMavenChanges.png" alt=""><br> 
+And load maven changes<br>
+You can also do that by using the command:<br>
+<span class="code">mvn org.apache.maven.plugins:maven-dependency-plugin:2.1:get -DrepoUrl=http://nekohtml.sourceforge.net/ -Dartifact=net.sourceforge.nekohtml:nekohtml:1.9.22</span><br>
+This command will download the dependency to your local repository <span class="code">~/.m2</span><br>
+<hr>
+<h3>Build complicated JAR manually</h3>
+How to build a complicated jar that includes that contains <span class="names1">Extracted Directories</span>, <span class="names1">Library Files</span>,<span class="names1"> Module Output</span>,<span class="names1"> Module Sources</span> and more.<br>
+Do this with the UI can be very exahusting. In my case I only needed Extracted Directories of all the above. and I needed it as a zip, which complictes it even more.<br>
+The way to solve this is by creating a file that configures the jar, where you can write the files you want in your jar.<br>
+Go to the project .idea dir - <span class="code">cd $proj_dir/.idea</span><br>
+If you have artifacts configured, you will have a folder named <span class="code">artifacts</span>. Within you will find files that define the artifacts that you already have <span class="code">artifact-name.xml</span><br>
+If you don't have artifacts defined yet, you can create the directory and by the same logic create the artifact<br>
+<div class="code">
+	mkdir artifacts <br>
+	touch myartifact.xml<br>
+</div><br>
+If you already have an artifact you can look at its structure, if not you can put whatever you want in this structure:
+<div class="file">
+&lt;component name="ArtifactManager"><br>
+  &ensp;&lt;artifact type="jar" name="some:jar"><br>
+    &ensp;&ensp;&lt;output-path>$PROJECT_DIR$/out/artifacts/mydir&lt;/output-path><br>
+    &ensp;&ensp;&lt;root id="archive" name="my.jar"><br>
+      &ensp;&ensp;&ensp;&lt;element id="module-output" name="module-name" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="extracted-dir" path="$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar" path-in-jar="/" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/springframework/spring-expression/5.3.7/spring-expression-5.3.7.jar" path-in-jar="/" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="library" level="project" name="Maven: cglib:cglib-nodep:3.2.4" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="artifact" artifact-name="artifact:jar" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="file-copy" path="$USER_HOME$/aa" /><br>
+      &ensp;&ensp;&ensp;&lt;element id="dir-copy" path="$MAVEN_REPOSITORY$/antlr" /><br>
+    &ensp;&ensp;&lt;/root><br>
+  &ensp;&lt;/artifact><br>
+&lt;/component><br>
+</div><br>
+<hr>
+<h4>Explanation:</h4>
+<span class="file">component</span> - The name of the component that Intellij uses - Always ArtifactManager<br>
+<span class="file">artifact</span> - The type of the artifact and its name, that will be shown in the artifact part in When getting inside File->Project Structure->Artifacts<br>
+<span class="file">output-path</span> - Where the jar file will be outputed to. <span class="names1">PROJECT-DIR</span> - Intellij variable that contains the project<br>
+<span class="file">root</span> - <br>
+	<div class="explanationroot">
+	id - The type of the file.<br>
+	name - The name of the file that is the ouput of the process<br>
+	</div>
+</p>
+<span class="file">element</span> - <br>
+	<span class="explanationelement">id</span> - <br>
+	<div class="explanationid">
+		module-output - Some module output- as <span class="names1">name</span> put the module name. Usually the current module<br>
+		extracted-dir - Extracts the dir that you give as path into the jar. <span class="names1">$MAVEN_REPOSITORY</span> - The path to local maven repository.<br>
+		library - A maven library that you want to be in the jar.<br>
+		artifact - Artifact that intellij have that you want to be in the jar.<br>
+		file-copy - A file that you want in the jar.<br>
+		dir-copy - A directory to have tis content in the jar.<br>
+	</div>
+
+</body>
