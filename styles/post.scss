@@ -31,7 +31,26 @@ body {
   line-height: 2;
 }
 
-.header {
+.header-container{
+  display: grid;
+  background-color: var(--color-secondary);
+  padding: 10px;
+}
+.article-header{
+  grid-column: 1 / span 9;
+  grid-row: 1;
+  padding: 10px;
+}
+.back-header{
+  grid-column: 10;
+  grid-row: 1;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+
+.heady {
   margin: 3px;	
   padding: 40px;
   font-size: 40px;
