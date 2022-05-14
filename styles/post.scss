@@ -49,6 +49,48 @@ body {
   padding: 10px;
 }
 
+.ctrl-key {
+	text-transform: uppercase;
+	font-weight: 900;
+	&:hover {
+		color: #4DD5FE
+	}
+}
+
+.small-text {
+	font-size: 70%;
+	font-weight: 100;
+}
+
+.h3-text {
+	font-size: 20px;
+	font-weight: 900;
+}
+
+.h4-text {
+	font-size: 90%;
+	font-weight: 700;
+}
+
+.tab1 {
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.tab2 {
+	display: inline-block;
+	margin-left: 35px;
+}
+
+.tab3 {
+	display: inline-block;
+	margin-left: 60px;
+}
+
+.tab4 {
+	display: inline-block;
+	margin-left: 80px;
+}
 
 .heady {
   margin: 3px;	
@@ -127,8 +169,10 @@ body {
 }
 
 .command{
+	padding: 3px;
+	background-color: black;
 	color: white;
-
+	border: 1px solid #fff;
 }
 
 a{

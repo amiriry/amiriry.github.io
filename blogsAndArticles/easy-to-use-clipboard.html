@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Clipboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="stylesheet" href="../styles/easy_to_use_clipboard.css">
+  <link rel="icon" href="../img/only-my-face.png">
+
+<div class="header-container">
+	<div class="header-container article-header"><h2>Fast and easy to use python clipboard</h2></div>
+	<div class="header-container back blogs back-header"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+</head>
+<body>
+
+<p>
+<h4>How to create a clipboard with python - and use it in other applications(example: vim)</h4>
+<p>
+<br>
+The computer clipboard is very easy to use<br>
+<span class="ctrl-key">Ctrl+c</span> and you are set to go with <span class="ctrl-key">Ctrl-v</span> whenever you want<br>
+But what happens when you want to have more than one value in your clipboard? When you have 3, 4 , 1000 values you need to use, one after the other and they are on different pages?<br>
+You have to do <span class="ctrl-key">Ctrl+c</span> <span class="ctrl-key">Ctrl+v</span> multiple times and switch between windows. Can be very frustrating.<br>
+So I created clipboard script that saves multiple values to a JSON file and you can load it wherever you want because its a file.<br>
+I called it <span class="command">zxclipboard</span>, from the reason I explained in the post about creating command with autocompletion(<a href="https://amiriry.github.io/blogsAndArticles/control_everything_command.html">Control the computer with one command</a>).<br>
+If you just want to see the script click <a href="https://github.com/amiriry/Python/blob/master/Scripts/zxclipboard">here</a>.<br>
+<hr>
+<h3>Explanation:</h3><br>
+<div class="code">
+	SAVED_DATA = "/tmp/clipboard.json"</div> - This is the json file that the script is going to use<br>
+<div class="code empty_file_func">
+	<span class="func_name">def empty_file(file_path):</span> <br>
+	<span class="with_statement">with open(file_path, "w") as f:</span><br> 
+	<span class="internal">json.dump({}, f)</span><br>
+</div> - Creates empty json file <br>
+<div class="code">
+	<span class="check-size">if len(sys.argv) == 2 or len(sys.argv) == 3:</span><br>
+	<div class="internal">
+		command = sys.argv[1] <br>
+		data = load_data(SAVED_DATA)<br>
+	</div> 
+</div> - Check if there are 2 or 3 arguments for the command. If 2, then its only the command and action. If 3 then the register that is being used is <span class="third-explain">also mentioned. Then load the content of the file to a variable</span><br>
+<div class="code">
+	if command == "save": <br>
+	<span class="tab1"></span>if len(sys.argv) == 3: <br>
+	<span class="tab2"></span>key = sys.argv[2] <br>
+	<span class="tab"></span>else: <br>
+	<span class="tab2"></span>key = input("Enter a key:") <br>
+	<br>
+ 	value = clipboard.paste().replace("\n", "") <br>
+ 	if value in data.values(): <br>
+	<span class="tab1"></span>print("Value \"" + value + "\" already exists so NOT saved again") <br>
+	<span class="tab1"></span>exit <br>
+ 	else: <br>
+	<span class="tab1"></span>data[key] = value <br>
+	<span class="tab1"></span>save_data(SAVED_DATA, data) <br>
+	<span class="tab1"></span>print("Data saved in clipboard.json") <br>
+</div>- If register is mentioned use it and save it in the file, else ask for a register and save it in the file<br><br>
+<div class="code">
+   elif command == "load":
+	<span class="tab1"></span>for k,v in data.items():<br>
+	<span class="tab2"></span>print(k + ":", v)<br>
+	<span class="tab1"></span>key = input("Enter a key:")<br>
+	<span class="tab1"></span>if key in data:<br>
+	<span class="tab2"></span>clipboard.copy(data[key])<br>
+	<span class="tab2"></span>print("data is in clipboard")<br>
+	<span class="tab1"></span>else:<br>
+	<span class="tab2"></span>print("Key does not exist")<br>
+</div> - Show all the keys and values, enter what key you want, if it exists, load it<br> 
+<div class="code">elif command == "list"</div> - List all existing keys and values in clipboard<br>
+<div class="code">elif command == "insert"</div> - Insert a key and value(current clipboard content) to the file<br>
+<div class="code">elif command == "rm"</div> - Remove all file content - Erase all clipboard values<br>
+<hr>
+<span class="h3-text">Usage Example</span> - <span class="small-text">All the usages are in vim</span><br>
+<span class="h4-text">1st Usage</span> -<br>
+<div class="tab1">
+I wanted to be able to copy few things from text file to be used in other window. So I need to copy text from a file and be able to put it in the clipboard I built.
+So I put this command in vimrc file(actually a very complex vim files structures that will be explained in other post):<br>
+<span class=code>command! Zxclipboardsave :!zxclipboard save</span> - Now when I copy something from the file to clipboard I can save it in a dedicated register which can be used anywhere else in the <span style="margin-left: 420px">computer</span> <br>
+<span class=code>command! Zxclipboardload :!zxclipboard load</span> - I can load to vim things that I saved in the clipboard file.<br>
+I can create shortcut for those command like <span class="command">zxs</span> or <span class="command">zxl</span> and it will be very easy to use.<br><br>
+</div>
+
+<span class="h4-text">2nd Usage</span> -<br>
+<div class="tab1">
+I can create a map to save the path of the file to the clipboard so it can be taken from the clipboard for other places that needs it - <br> 
+<span class="code">nnoremap &lt;leader>cfc :let @+=expand('%:p')&lt;CR>:!zxclipboard save f&lt;CR>&lt;CR></span><br>
+The map name - cfc - Copy Filename Clipboard - should be easy to remember, as it self explanatory.<br>
+
+<div class="tab2" style="font-size: 13px;">Explanation:<br>
+&lt;leader>cfc - the character that you define as mapleader <span class="command">let mapleader=","</span> in my case. and then the combination after it to trigger the command<br>
+:let @+= - define the register '+' which is the clipboard register. <span class="command">@</span> is for refering a register. You can put after it whatever character you want.<br>
+expand('%:p') - A way to print the file path.<br>
+&lt;CR> - Indicate Carriage Return, in other words - Enter<br>
+:! - What comes after will be run as a shell command<br>
+zxclipboard save f - Use the command zxclipboard and put whats in clipboard (file path) in f key.If zxclipboard is not in $PATH env var, should write the whole path to it.<br>
+Two &lt;CR>s to finishe the command.
+
+
+</div>
+
+
+</div>
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>
