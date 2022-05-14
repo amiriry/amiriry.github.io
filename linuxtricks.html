@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux Tricks</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles/post.css">
+  <link rel="stylesheet" href="styles/linuxtricks.css">
+  <link rel="icon" href="../img/only-my-face.png">
+
+<div class="header-container">
+	<div class="header-container article-header"><h2>Linux Tricks</h2></div>
+	<div class="header-container back blogs back-header"><a href="index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+</head>
+<body>
+
+<p>
+<h4>What can be done very easy in linux?</h4>
+<p>
+Some stuff that I encounter that everyone should know
+<hr>
+
+<div class="trick">
+	<div class="explanation">
+		<span class="date">14.05.2022 - 19:50 - Saturday</span><br>
+		When you work with linux, a lot of times you have to copy someoutput to use it somewhere else. Not just redirecting, woe piping which is easy, but take the output and put it in some other application.<br>
+		Most of the time you have to do it by hand, and it might get exhuasting if you have to copy a lot of text to some mail or other GUI application.<br>
+		The solution: Create an alias that uses a command that knows how to work with clipboard, that takes the output from the command and put it in clipboard automatically.<br>
+		The command is <span class="command">xclip</span>.<br>
+		There are 2 options for the alias, one with new line copied and one without(The output have new-line character in the end):<br>
+	</div>
+	<div class="command">
+		alias cp2clip='xclip -selection clipboard'<br>
+		alias cp2clip-nonl="tr -d '\n' | xclip -selection clipboard"<br>
+	</div>
+	Now it can be used piped to some other command to get its output to the clipboard:
+	<div class="command">
+		echo "some thing to copy to blipboard" | cp2clip
+	</div>
+	Now you can use <span class="ctrl-key">ctrl+v</span> to paste it wherever you want
+	<br><br>
+</div>
+
+<div class="trick">
+	<div class="explanation">
+		<span class="date">14.05.2022 - 19:37 - Saturday</span>
+		<h4 class="header">Using '#' to remember a command</h4>
+		When you start writing a command and in the middle of it you realize that you need something from other command, som output.<br>
+		What I used to do is to do <span class="ctrl-key">ctrl+c</span> and do the other command I need, and then start writing the command again.<br>
+		This can get very frustrating if you wrote a very long command<br>
+		Solution: Go to the begining of the line with <span class="ctrl-key">ctrl+a</span> and put '#'. Press enter and you have the command saved in your history to use whenever you want.
+	</div><br>
+	For example, in the middle of this command you realized you need some other security group with some id <num>:
+	<div class="command">
+		>> aws ec2 create-security-group --group-name my-sg --description "My security group"
+	</div>
+	So you do <span class="ctrl-key">ctrl+a</span> then '#' and then Enter:
+	<div class="command">
+		>> #aws ec2 create-security-group --group-name my-sg --description "My security group"<br>
+		>>
+	</div>
+	Search for the group you need:
+	<div class="command">
+		>> aws ec2 describe-security-groups --query "SecurityGroups[*].{Name:GroupName,ID:GroupId}" | grep &lt;num>
+	</div>
+	Then you go just one command up in history and can fill in the blank
+	<br><br>
+<hr>
+	
+</div>
+
+
+<div class="back blogs"><a href="index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>
