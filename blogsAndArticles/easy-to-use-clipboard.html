@@ -79,7 +79,7 @@ If you just want to see the script click <a href="https://github.com/amiriry/Pyt
 <div class="tab1">
 I wanted to be able to copy few things from text file to be used in other window. So I need to copy text from a file and be able to put it in the clipboard I built.
 So I put this command in vimrc file(actually a very complex vim files structures that will be explained in other post):<br>
-<span class=code>command! Zxclipboardsave :!zxclipboard save</span> - Now when I copy something from the file to clipboard I can save it in a dedicated register which can be used anywhere else in the <span style="margin-left: 420px">computer</span> <br>
+<span class=code>command! Zxclipboardsave :!zxclipboard save</span> - Now when I copy something from the file to clipboard I can save it in a dedicated register which can be used anywhere else in the <span class="zxclipboardsave-vimshortcut-explanation">computer</span> <br>
 <span class=code>command! Zxclipboardload :!zxclipboard load</span> - I can load to vim things that I saved in the clipboard file.<br>
 I can create shortcut for those command like <span class="command">zxs</span> or <span class="command">zxl</span> and it will be very easy to use.<br><br>
 </div>
@@ -90,7 +90,7 @@ I can create a map to save the path of the file to the clipboard so it can be ta
 <span class="code">nnoremap &lt;leader>cfc :let @+=expand('%:p')&lt;CR>:!zxclipboard save f&lt;CR>&lt;CR></span><br>
 The map name - cfc - Copy Filename Clipboard - should be easy to remember, as it self explanatory.<br>
 
-<div class="tab2" style="font-size: 13px;">Explanation:<br>
+<div class="tab2 vim-shortcut-explanation">Explanation:<br>
 &lt;leader>cfc - the character that you define as mapleader <span class="command">let mapleader=","</span> in my case. and then the combination after it to trigger the command<br>
 :let @+= - define the register '+' which is the clipboard register. <span class="command">@</span> is for refering a register. You can put after it whatever character you want.<br>
 expand('%:p') - A way to print the file path.<br>
