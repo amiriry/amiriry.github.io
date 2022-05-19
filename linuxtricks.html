@@ -30,12 +30,13 @@ Some stuff that I encounter that everyone should know
 		For example when you started a machine in the cloud and wanted to get to "working" state, but you had to press refresh time and time again.<br>
 		Each time you have to take the cursor from where you are to the place where the refresh is and come back to where you were before.<br>
 		In addition, you had to change context multiple times.<br>
-		There's a script you can use to do that <a href="https://raw.githubusercontent.com/amiriry/Linux/main/scripts/reclick.sh" target="_blank">here</a>
+		There's a script you can use to do that <a href="https://raw.githubusercontent.com/amiriry/Linux/main/scripts/reclick.sh" target="_blank">here</a><br>
+		First of all install xdotool <span class="command">>> apt install xdotool</span>
 	</div>
-	<div class="code">read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</div> - Read from mouslocation, current x and y<br>
-	You are asked to move to the location in the screen where you want to click multiple times<br>
-	<div class="code">read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</div> - Take the coordinates where you want to go<br>
-	<div class="code">xdotool mousemove $cx $cy</div> - Move to where the script was started - current place<br>
+	<span class="command">>> read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Read from mouslocation, current x and y. This command reads first two variables that comes from the command in the parentheses.<br>
+	Then you are asked to move to the location in the screen where you want to click multiple times<br>
+	<span class="command">>> read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Take the coordinates where you want to go<br>
+	<span class="command">>> xdotool mousemove $cx $cy</span> - Move to where the script was started - current place<br>
 	Then you are asked for the delay between clicks.<br>
 	In the end, a while loop that take saves your current place, as above, and moves back and forth between your current place and the goto place in intermission of the time you mentioned for delay.
 	<br><br>
@@ -53,12 +54,12 @@ Some stuff that I encounter that everyone should know
 		There are 2 options for the alias, one with new line copied and one without(The output have new-line character in the end):<br>
 	</div>
 	<div class="command">
-		alias cp2clip='xclip -selection clipboard'<br>
-		alias cp2clip-nonl="tr -d '\n' | xclip -selection clipboard"<br>
+		>> alias cp2clip='xclip -selection clipboard'<br>
+		>> alias cp2clip-nonl="tr -d '\n' | xclip -selection clipboard"<br>
 	</div>
 	Now it can be used piped to some other command to get its output to the clipboard:
 	<div class="command">
-		echo "some thing to copy to blipboard" | cp2clip
+		>> echo "some thing to copy to blipboard" | cp2clip
 	</div>
 	Now you can use <span class="ctrl-key">ctrl+v</span> to paste it wherever you want
 	<br><br>
