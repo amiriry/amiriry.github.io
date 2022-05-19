@@ -34,7 +34,7 @@ Some stuff that I encounter that everyone should know
 		First of all install xdotool <span class="command">>> apt install xdotool</span>
 	</div>
 	<span class="command">>> read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Read from mouslocation, current x and y. This command reads first two variables that comes from the command in the parentheses.<br>
-	Then you are asked to move to the location in the screen where you want to click multiple times<br>
+	<span class="reclick-secondline">Then you are asked to move to the location in the screen where you want to click multiple times</span><br>
 	<span class="command">>> read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Take the coordinates where you want to go<br>
 	<span class="command">>> xdotool mousemove $cx $cy</span> - Move to where the script was started - current place<br>
 	Then you are asked for the delay between clicks.<br>
