@@ -21,10 +21,31 @@
 <p>
 Some stuff that I encounter that everyone should know
 <hr>
-
+<hr><hr>
+<div class="trick">
+	<div class="explanation">
+		<span class="date">19.05.2022 - 19:50 - Saturday</span><br>
+		<h4 class="header">Reclick - refresh without doing anything, or even notice</h4>
+		Did you ever had to refresh the screen multiple times to see the result? 
+		For example when you started a machine in the cloud and wanted to get to "working" state, but you had to press refresh time and time again.<br>
+		Each time you have to take the cursor from where you are to the place where the refresh is and come back to where you were before.<br>
+		In addition, you had to change context multiple times.<br>
+		There's a script you can use to do that <a href="https://raw.githubusercontent.com/amiriry/Linux/main/scripts/reclick.sh" target="_blank">here</a>
+	</div>
+	<div class="code">read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</div> - Read from mouslocation, current x and y<br>
+	You are asked to move to the location in the screen where you want to click multiple times<br>
+	<div class="code">read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</div> - Take the coordinates where you want to go<br>
+	<div class="code">xdotool mousemove $cx $cy</div> - Move to where the script was started - current place<br>
+	Then you are asked for the delay between clicks.<br>
+	In the end, a while loop that take saves your current place, as above, and moves back and forth between your current place and the goto place in intermission of the time you mentioned for delay.
+	<br><br>
+</div>
+<hr><hr><hr>
+<div class="trick">
 <div class="trick">
 	<div class="explanation">
 		<span class="date">14.05.2022 - 19:50 - Saturday</span><br>
+		<h4 class="header">Copy from cli output straight to clipboard</h4>
 		When you work with linux, a lot of times you have to copy someoutput to use it somewhere else. Not just redirecting, woe piping which is easy, but take the output and put it in some other application.<br>
 		Most of the time you have to do it by hand, and it might get exhuasting if you have to copy a lot of text to some mail or other GUI application.<br>
 		The solution: Create an alias that uses a command that knows how to work with clipboard, that takes the output from the command and put it in clipboard automatically.<br>
