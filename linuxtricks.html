@@ -24,6 +24,20 @@ Some stuff that I encounter that everyone should know
 <hr><hr>
 <div class="trick">
 	<div class="explanation">
+		<span class="date">20.05.2022 - 14:45 - Friday</span><br>
+		<h4 class="header">Good usage to cp2clip and zxclipboard together</h4>
+		This short post will explain how to put multiple strings into the python clipboard from the post <a href="https://amiriry.github.io/blogsAndArticles/easy-to-use-clipboard.html">Python Clipboard</a>  in one commad.<br>
+		To undertstand fully what is going on here, first read it, and also <a href="https://amiriry.github.io/blogsAndArticles/for-loop-cmds.html">For loop</a> post if you can.<br>
+		Now you should understand how this command insert mutliple values in to the clipboard, that can be used later:<br>
+		<span class="command">>> for n in $(&lt;command-to-get-names-each-in-separate-line>);do echo $n | cp2clip;echo $n;read -p "key: " reg;zxclipboard save $reg;done')</span><br><br>
+		This will go over the output line by line (The reason for having the names separated by newline character), show you what you are going to save, and asks you for a key to save it in.<br>
+	</div>
+	In the end of the process, you can use <span class="command">>> zxclipboard list</span> to see that all the names are inside the clipboard.
+	<br><br>
+</div>
+<hr><hr><hr>
+<div class="trick">
+	<div class="explanation">
 		<span class="date">19.05.2022 - 16:09 - Thursday</span><br>
 		<h4 class="header">Reclick - refresh without doing anything, or even notice</h4>
 		Did you ever had to refresh the screen multiple times to see the result? 
