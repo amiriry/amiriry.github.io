@@ -212,6 +212,10 @@ body {
   margin-left: 25px;
 }
 
+.date {
+  color: #FECB54;
+}
+
 .dash {
   display: flex;
   font-size: 75px;
