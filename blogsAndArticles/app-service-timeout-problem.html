@@ -1,0 +1,432 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solve app service timeout for standard users</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="icon" href="../img/only-my-face.png">
+
+<div class="header-container">
+	<div class="header-container article-header"><h2>App service timeout limit solution</h2></div>
+	<div class="header-container back blogs back-header"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+</head>
+<body>
+
+<p>
+<h4>How to solve the 240 seconds app service timeout limit for standard users</h4>
+<p>
+
+While working in Azure we stumbled a problem what at the time we thought could not be solved.<br>
+We had our main application running on App Service, and for standard account, there is a timeout of 240 seconds for a response to it.<br>
+As we were growing in clients, we started working with clients that their response time was bigger. It started to be a big problem. We couldn't serve some big clients because of it.<br>
+We could've become a premium account, but before doing that, we wanted to try to find other solution.<br>
+
+The first step was to devide everything up, to understand what solution can be used, or how can I group services to solve this.<br>
+---<br>
+First thing are the containers that App service runs - <span class="names1">Container Instances</span>, can be used. <br>
+To make it work, what we need is the pipeline that build the images - and then running the containers from that images.<br>
+Then we can use Application gateway. It can be connected to any compute service, in this case a container. We can put the container instance as the backend and define application gateway with whatever timeout we want.<br>
+When I checked it (at about the start of April 2022) you can put the timeout to be at least 10 mins. <br>
+To check it you can create a little application that waits as long as you want. I created this:<br>
+<div class="code">
+	from flask import Flask<br><br>
+	from time import sleep<br>
+	app = Flask(__name__)<br><br>
+	@app.route("/")<br>
+	def hello_world():<br>
+	&nbsp;&nbsp;sleep(&lt;n>)<br>
+	&nbsp;&nbsp;return "Hello, world!"<br>
+</div><br>
+Instead of &lt;n> write whatever time you want it to wait, and make the application gateway timeout bigger than that.<br>
+Run it:<br>
+<div class="command">
+	>> export FLASK_APP=&lt;file_name><br>
+	>> flask run
+</div>
+For example I put 600 seconds for 10 minutes in the flask application ad 660 in the timeout of application gateway.<br>
+---<br>
+<span class="h3-text">Pipeline step</span><br>
+Now you should create a pipeline that does everything you want<br>
+You can look at the pipeline <a href="https://raw.githubusercontent.com/amiriry/Devops/main/Cloud/Azure/AzurePipelines/appservice-replacement.yaml" target="_blank">here</a>.<br>
+<span class="h4-text">Explanation:</span><br>
+<div class="code-explanation-container">
+	<div class="code">
+		pr:<br>
+		<span class="tab1"></span>branches:<br>
+		<span class="tab2"></span>include:<br>
+		<span class="tab3"></span>- staging<br>
+		<span class="tab2"></span>exclude:<br>
+		<span class="tab3"></span>- develop<br>
+		<span class="tab3"></span>	- production<br>
+	</div>
+	<div class="dash">
+		-
+	</div>
+	<div class="explanation">
+		Run this pipeline when a PR is done.<br>
+		<span class="names1">branches.include</span> - What branches to include in those that are going to call the pipeline<br>
+		<span class="names1">branches.exclude</span> - What branches to exclude in those that are going to not call the pipeline<br>
+		To include all branches put in include <span class="code">- '*'</span>
+	</div>
+</div>
+<div class="code-explanation-container">
+	<div class="code">
+	resources:<br>
+		<span class="tab1"></span>repositories:<br>
+		<div class="tab2">
+			- repository: repo1<br>
+			<div class="space1">
+				type: github<br>
+				endpoint: endpoint1
+				name: name/repo2_name<br>
+				trigger: true<br>
+			</div><br>
+			- repository: repo2<br>
+			<div class="space1">
+				type: github<br>
+				endpoint: endpoint1
+				name: name/repo2_name<br>
+				trigger: true<br>
+			</div>
+		</div><br>
+		<span class="tab1"></span>containers:<br>
+		<div class="tab2">
+			- container: container-name<br>
+			<div class="space1">
+				image: container.registry/container-name<br>
+				endpoint: ACR-endpoint 
+			</div>
+		</div>
+	</div>
+	<div class="dash">
+		-
+	</div>
+	<div class="explanation">
+	The resources that I am going to use in the pipe line.<br>
+	repositories - I give:<br> 
+	The <span class="names1">type</span> - in this case its github. <br>
+	The <span class="names1">endpoint</span> - which is the service connections that I am using to get this resource.<br>
+	The <span class="names1">trigger</span> - which says whether this repo trigger the pipeline when it have a PR.<br>
+	The <span class="names1">containers</span> - If I want to use a container to run steps - this is the container that I am using. I will refer to it in the stage where I want to use it, by the name after <span class="names1">container</span>.
+	</div>
+</div>
+
+<div class="code-explanation-container">
+	<div class="code">
+	variables:<br>
+		<div class="tab1">
+			- group: group-name <br>
+			- name: dockerRegistryServiceConnection<br>
+			<span class="space1"></span>value: "&lt;docker_registry_service_connection_value>"<br>
+			- name: imageRepository<br>
+			<span class="space1"></span>value: "&lt;image_repo_name>"<br>
+			- name: containerRegistry<br>
+			<span class="space1"></span>value: "&lt;container_registry>"<br>
+			#System.Debug: true<br>
+		</div>
+	</div>
+	<div class="dash">
+		- 
+	</div>
+	<div class="explanation">
+		<span class="names1">group</span> - Used for variables group - you can deinfe a variable group through the ui and use it afterwards, so it won't appear in the pipeline as raw text.<br>
+		<a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#systemdebug">System.Debug</a> - The best way to debug your pipeline. Much more information on the pipeline run.<br>
+		Other names are self explanatory.
+	</div>
+</div>
+
+<div class="code-explanation-container">
+	<div class="code">
+		stages:<br>
+		<div class="space1">
+			- stage: Fetch<br>
+			condition: eq(variables['Build.Repository.Name'], 'repo1')<br>
+			displayName: Fetch, build and upload<br>
+			jobs:<br>
+			<div class="space1">
+				- job: Fetch<br>
+				displayName: Fetch and Build<br>
+				steps:<br>
+				<div class="space1">
+					- checkout: repo1<br>
+					- task: NodeTool@0<br>
+					inputs:<br>
+					<div class="space1">versionSpec: '14.16.1'</div><br>
+					- script: |<br>
+					<div class="space1">
+						<span class="space1">npm install</span><br>
+						displayName: npm install<br>
+					</div><br>
+					- task: DownloadSecureFile@1<br>
+					<div class="space1">
+						name: securefile1<br>
+						inputs:<br>
+						<span class="space1">secureFile: "file1.env"</span><br>
+					</div><br>
+					- script: |<br>
+					<span class="space1">cp $(securefile1.secureFilePath) $(Build.SourcesDirectory)/.env</span><br>
+					- script: |<br>
+					<div class="space1">
+						<span class="space1">npm run prod</span><br>
+						displayName: npm run prod
+					</div><br>
+					- task: PublishPipelineArtifact@1<br>
+					<div class="space1">
+						inputs:<br>
+						<div class="space1">
+							targetPath: build/<br>
+							artifactName: staticall
+						</div>
+					</div><br>
+					- task: PublishPipelineArtifact@1<br>
+					<div class="space1">
+						inputs:<br>
+						<div class="space1">
+							targetPath: build/static/css<br>
+							artifactName: staticcss
+						</div>
+					</div><br>
+					- task: PublishPipelineArtifact@1<br>
+					<div class="space1">
+						inputs:<br>
+						<div class="space1">
+							targetPath: build/static/js<br>
+							artifactName: staticjs<br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="dash">
+		-
+	</div>
+	<div class="explanation">
+		First of all I give the first stage a name: <span class="names1">Fetch</span>.<br>
+		The condition <span class="names1">condition: eq(variables['Build.Repository.Name'], 'repo1')</span> - check whether the current branch is repo1, so this stage will run only if the pipeline that had a pr that started the pipeline is repo1.<br><br>
+		The NodeTool is self explanatory - download and cache Nodejs, add it to path and then use it.<br>
+		<span class="names1">DownloadSecureFile</span> - Download a secure file that you put in Azure.<br><br>
+		Next script tasks, copy the secure file and run npm prod - some package script that you want npm to run<br>
+		Then I wanted to publish file that were built in this build to other parts of the pipeline so I used <span class="names1">PublishPipelineArtifact</span>.<br><br>
+		I give it as input <span class="names1">targetpath</span>, which is the target that I want to be published as an artifacr<br>
+		And <span class="names1">artifactName</span> - which is the name of the artifact that is going to be used in the next stages.<br>
+		<hr>
+		I publish all the static file that were created, and specific files like css files and js.
+
+	</div>
+</div>
+<div class="code-explanation-container">
+	<div class="code">
+		- stage: Build<br>
+		<div class="space1">
+			condition: or(succeeded(), eq(variables['Build.Repository.Name'], 'repo2'))<br>
+			displayName: Build and push stage<br>
+			jobs:<br>
+			<div class="space1">
+				- job: Build<br>
+				displayName: Build<br>
+				steps:<br>
+				<div class="space1">
+					- checkout: repo2<br>
+					- task: DownloadSecureFile@1<br>
+					<div class="space1">
+						name: npmrc<br>
+						inputs:<br>
+						<span class="space1">secureFile: ".npmrc"</span>
+					</div><br>
+					- script: sudo cp $(npmrc.secureFilePath) $(Build.Repository.LocalPath)<br>
+					<span class="space1">displayName: Copy .npmrc file to working directory</span><br>
+					- bash: |<br>
+					<div class="space1">
+						<div class="space1">
+						<span class="names1">#Create path for files if doesn't exit</span><br>
+						sudo mkdir -p $(Build.Repository.LocalPath)/static/js<br>
+						sudo mkdir -p $(Build.Repository.LocalPath)/static/css<br>
+						sudo chown -R vsts:vsts $(Build.Repository.LocalPath)
+						</div><br>
+					displayName: Create all needed directories
+					</div><br>
+					- task: DownloadPipelineArtifact@2<br>
+					<div class="space1">
+						inputs:<br>
+						<div class=space1>
+							source: current<br>
+							artifact: staticcss<br>
+							path: $(Build.Repository.LocalPath)/static/css
+						</div><br>
+						displayName: Download  staticcss artifact<br>
+					</div><br>
+					- task: DownloadPipelineArtifact@2<br>
+					<div class="space1">
+						inputs:<br>
+						<div class="space1">
+							source: current<br>
+							artifact: staticjs<br>
+							path: $(Build.Repository.LocalPath)/static/js
+						</div><br>
+						displayName: Download staticjs artifact
+					</div><br>
+					- task: DownloadPipelineArtifact@2<br>
+					<div class="space1">
+						inputs:<br>
+						<div class="space1">
+							source: current<br>
+							artifact: staticall<br>
+							path: $(Build.Repository.LocalPath)/static/
+						</div><br>
+						displayName: Download  staticall artifact
+					</div><br>
+					- bash: | #DEBUG - see that everything is in place<br>
+					<div class="space1">
+						<div class="space1">
+							echo $(Build.Repository.LocalPath)<br>
+							ls $(Build.Repository.LocalPath)<br>
+							echo<br>
+							echo STATIC<br>
+							ls $(Build.Repository.LocalPath)/static<br>
+							echo<br>
+							echo STATICCSS<br>
+							ls $(Build.Repository.LocalPath)/static/css<br>
+							echo<br>
+							echo STATICJS<br>
+							ls $(Build.Repository.LocalPath)/static/js
+						</div><br>
+						displayName: Content and path of all artifacts<br>
+						continueOnError: true
+					</div><br>
+					- task: Docker@2<br>
+					<div class="space1">
+						displayName: Build and push an image to container registry<br>
+						inputs:<br>
+						<div class="space1">
+							serviceConnection:<br>
+							containerRegistry: "$(containerRegistry)" <br>
+							repository: "$(imageRepository)"<br>
+							command: "buildAndPush"<br>
+							Dockerfile: "**/Dockerfile"<br>
+							tags: "my-container-image"
+						</div><br>
+						condition: succeededOrFailed()<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="dash">
+		-
+	</div>
+	<div class="explanation">
+		Second stage - The build itself.<br><br>
+		<span class="names1">or(succeeded(), eq(variables['Build.Repository.Name'], 'repo2'))</span> - Do this stage in one of two cases - if the last one succeeded or if the repository running the build is <span class="names1">repo2</span>.<br><br>
+		Checkout and Download - Like in the last stage - Checkout the repo and download secure file for nodejs.<br>
+		Move the npmrc file to the local path of where the pipeline is running.<br>
+		Run script to create directories for files if doesn't exist(You can create whatever paths you need)<br>
+		Download the artifact created before with: <span class="names1">DownloadPipelineArtifact@2</span><br>
+		For input you give:<br>
+		<span class="names1">source</span> - The place where you take the artifacts from, in this case <span class="names1">current</span> means the current pipeline.<br>
+		<span class="names1">artifact</span> - The name of the artifact you want to download.<br>
+		<span class="names1">path</span> - Where you want to download the artifact to.<br><br>
+		Download all the artifacts to the places where they are suppose to be - <br> 
+		All static file to <span class="names1">$LocalPath/static</span><br>
+		JS files are going to <span class="names1">$LocalPath/static/js</span><br>
+		CSS files are going to <span class="names1">$LocalPath/static/css</span>
+		<br><br>
+		In the next step I want to see that all the files are in the right places.<br>
+		So I do a script that prints the names of the artifact that I suppose to be looking at and list the contents of the places where it is suppose to be.<br><br>
+		And the last stage is to push an image of the container that I created (The container that the pipeline is running on) to the registry that I want, in this case my own ACR.<br>
+		<span class="names1">ServiceConnection</span> - The service connection to the ACR that I want to use.<br>
+		<span class="names1">containerRegistry</span> - The name of the container registry that I want to use. <br>
+		<span class="names1">command</span> - There are few options for command when using Docker task, in this case - buildAndPush does exactly what it says.<br>
+		<span class="names1">Dockerfile</span> - What dockerfile to use when building - ** searches through all the directories in the repo that the pipeline is in.<br>
+		<span class="names1">tags</span> - The tag to push the image with to the repo, after building.<br>
+		The condition <span class="names1">succeededOrFailed</span> means that this step is running whether the last step succeeded or failed.<br>
+	</div>
+</div>
+
+<div class="code-explanation-container">
+	<div class="code">
+		- stage: Run<br>
+		<div class="space1">
+			condition: succeeded()<br>
+			displayName: Activate the App<br>
+			jobs:<br>
+			<div class="space1">
+				- job: StartAndConnect<br>
+				displayName: Connect APPGW to container<br>
+				steps:<br>
+				<div class="space1">
+					- task: DownloadSecureFile@1<br>
+					<div class="space1">
+						name: securefile3<br>
+						inputs:<br>
+						<span class="space1">secureFile: securefile3.env"/span>
+					</div><br>
+					- task: AzureCLI@2<br>
+					<div class="space1">
+						displayName: Get container IP<br>
+						inputs:<br>
+						<div class="space1">
+							# Name of service connection to azure resources<br>
+							azureSubscription: azurerm-connection <br>
+							scriptType: bash<br>
+							scriptLocation: inlineScript<br>
+							inlineScript: |<br>
+							<div class="space1">
+								file1_envfile=$(securefile3.secureFilePath)<br>
+								file2_pass=$(registrypass)<br>
+								echo CREATING CONTAINER...<br>
+								az container create -g my-resourcegroup --name my-container \ <br> 
+								<div class="space1">
+									--image container.regostry/container-name:my-container-image \<br> 
+									--registry-username username --registry-password $registrypass \<br>
+									--ip-address Private --location eastus --os-type Linux \<br> 
+									--command-line "/bin/bash -c 'az login --identity; npm run start-app'" \<br>
+									--ports 443 --vnet myvnet --subnet ci-subnet \<br> 
+									--assign-identity "<some-identity>" --environment-variables $(cat $file1_envfile | xargs) \ 
+								</div><br>
+								ACI_IP=$(az container show -g my-resourcegroup --name my-container<br>
+									<span class="space5"><span class="space3">--query ipAddress.ip -o tsv)</span></span><br>
+									echo "info: $ACI_IP"<br>
+									echo<br>
+									echo CHAGING APPLICATION GATEWAY my-appgw BACKENDPOOL IP<br>
+									az network application-gateway address-pool update -g my-resourcegroup \<br> 
+									--gateway-name my-appgw -n my-bp --servers $ACI_IP<br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="dash">
+		-
+	</div>
+	<div class="explanation">
+		Last stage - Run the container and connect it to the application gateway<br>
+		<span class="names1">condition</span> - only if the last stage succeded (meaning, all stages).<br>
+		<span class="names1">DownloadSecureFile@1</span> - Download file of environment variables<br>
+		<span class="names1">AzureCLI@2</span> - Enable to run a script that uses az commands.<br><br>
+		To be able to run it I need to use a service connection that enables connection to resource - <span class="names1">azurerm-connection</span> in this case.<br>
+		I provide a script type with the value of <span class="names1">scriptType</span>- in this case bash.<br>
+		And then I do the script itself, writing it after <span class="names1">inlineScript:</span><br>
+		• <span class="names1">file1_envfile</span> - The path to the file that contains all environment variables of the container that will be initialized.<br>
+		• <span class="names1">registrypass</span> - a secret that is defined in the variable group - 'groupname' - in the begining of the file. You use the secrets there in correspondence to their hirarchy - this secret is stored directly in the group, so it doesn't have a prefix, only the name.<br>
+		<span class="names1">az container create</span>... - The command to create a container with all the information from above. I take the image that was created in stage before. Using the registry username and password, which can be achieved from within azure. Use Private ip address so it will be accessible only from my vnet. <br>
+		<span class="names1">--command-line</span> - Start the command by login to azure, using the identity which is mentoined in the next parameter. Only then I can run the app with npm.<br>
+		Using port 443, with myvnet, and subnet that the container instance is in with the assigned identity inside the quotes (not mentioned here), and the environment variables in one line, which I can get by printing the file with env variables from above and using <span class="command">xargs</span> which print all of them in one line.<br>
+	</div>
+</div>
+After starting the container, I need its IP, to connect to Application Gateway. So I did the command:<br>
+<span class="command">az container show -g my-resourcegroup --name my-container --query ipAddress.ip -o tsv</span><br>
+This will query only the ip of the container that I created before.<br><br>
+To finish the task, I need to put the IP that I found as a backend to the existing application gateway. So:<br>
+<span class="command">az network application-gateway address-pool update -g my-resourcegroup --gateway-name my-appgw -n my-bp --servers $ACI_IP</span><br>
+I update the address-pool of the application gateway that I created which, which is named <span class="names1">my-bp</span>  with the servers(compte resource) <span class="names1">$AC_IP</span> - which is the IP of the container that I created.
+<br><br>
+<span class="h3-text">And That's It!!!</span>
+
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>

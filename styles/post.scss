@@ -84,12 +84,37 @@ body {
 
 .tab3 {
 	display: inline-block;
-	margin-left: 60px;
+	margin-left: 50px;
 }
 
 .tab4 {
 	display: inline-block;
-	margin-left: 80px;
+	margin-left: 65px;
+}
+
+.space1 {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.space2 {
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.space3 {
+	display: inline-block;
+	margin-left: 30px;
+}
+
+.space4 {
+	display: inline-block;
+	margin-left: 40px;
+}
+
+.space5 {
+	display: inline-block;
+	margin-left: 50px;
 }
 
 .heady {
@@ -174,6 +199,26 @@ body {
 	color: white;
 	border: 1px solid #fff;
 }
+
+.code-explanation-container{
+	display: grid;
+	grid-template-columns: auto auto 1fr;
+}
+
+.explanation{
+	margin-top: 10px;
+	margin-bottom: 5px;
+	margin-left: 25px;
+}
+
+.dash{
+	display: flex;
+	font-size: 75px;
+	margin: 50%;
+	align-self: center;
+}
+
+
 
 a{
 	color: rgb(255,55,0);
