@@ -24,6 +24,30 @@ Some stuff that I encounter that everyone should know
 <hr><hr>
 <div class="trick">
 	<div class="explanation">
+		<span class="date">29.05.2022 - 16:37 - Sunday</span><br>
+		<h4 class="header">Find needed jars within your local maven repo</h4>
+		When I wanted to create a jar (the process described in <a href=""https://amiriry.github.io/blogsAndArticles/create_jar_with_intellij.html"">this</a> blogpost), I had to find classes from jars in in the local repository of maven - <span class="File">$HOME/.m2/repository</span>.<br>
+		I would get an error like this:<br>
+		<div class="command">	
+			{<br>
+			  "errorMessage": "Error loading class application.package.StreamLambdaHandler: org/springframework/web/SpringBootServletInitializer",<br>
+			  "errorType": "java.lang.NoClassDefFoundError"<br>
+			}<br>
+		</div><br>
+		So I had to find where the class is defined. <br>
+		It is defined in jars, but I had to find the right jar inside the local maven repo to extract in the new jar(like one of the options in the blogpost above).<br>
+	The way I've done that is getting inside the local repo <span class="command">cd $HOME/.m2/repository</span> and do the command:<br>
+	<span class="command">for j in $(find . -iname "*.jar");do if [[ $(jar tf $j | grep &lt;class_name>) ]];then echo $j;fi;done&nbsp;</span><br>
+	To sum it up: Look inside all jars and grep the class name you need. Print it only when you find it.
+	</div><br>
+	Do this for each class you can't find definition too (which exist in the local repo of course, if not download it, the way to do it is also mentioned in the post).<br>
+	You can put all the classes needed in one <span class="command">for</span> command and find all the jars needed, and use the artifact file to put them all as extracted jars.<br><br>
+	And you're done.
+	<br><br>
+</div>
+<hr><hr><hr>
+<div class="trick">
+	<div class="explanation">
 		<span class="date">20.05.2022 - 14:45 - Friday</span><br>
 		<h4 class="header">Good usage to cp2clip and zxclipboard together</h4>
 		This short post will explain how to put multiple strings into the python clipboard from the post <a href="https://amiriry.github.io/blogsAndArticles/easy-to-use-clipboard.html">Python Clipboard</a>  in one commad.<br>
