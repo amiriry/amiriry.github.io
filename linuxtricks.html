@@ -22,6 +22,72 @@
 Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
+
+<div class="trick">
+	<div class="grid-container">
+		<div class="eof-inject">
+			<span class="date">25.06.22 - 16:44 - Saturday</span>
+			<h4 class="header">Use EOF fo injecting multiple line argument to a command</h4>
+			Did you ever had a situation where you needed some long string in your command line, or just an easier way to write variable in your cli?<br>
+			Well, there's a way to do that.<br>
+			Use <span class="command">&lt;&lt;EOF</span> and the command line will ask you for that!<br>
+			HOW TO DO THAT?<br><br>
+		</div>
+		<div class="cmd1">
+			<span class="h4-text">Multiline string as a shell variable:</span><br>
+			<div class="code">
+				$ sql=$(cat &lt;&lt;EOF<br>
+				<div class="tab1">
+					> SELECT foo, bar from db<br>
+					> WHERE foo='baz'<br>
+					> EOF<br>
+					> )
+				</div>
+			</div><br>
+			$sql will contain the whole query as a text
+		</div><br>
+		<div class="cmd2">
+			<span class="h4-text">Pass multi-line string to a file with redirection</span><br>
+			<div class="code">
+				$ cat &lt;&lt;EOF > print.sh<br>
+				<div class="tab1">
+					> #!/bin/bash<br>
+					> echo \$PWD<br>
+					> echo $PWD<br>
+					> EOF<br>
+				</div>
+			</div><br>
+			The file print.sh will contain whatever is written in the multiline lines
+		</div>
+		<div class="cmd3">
+			<span class="h4-text">Pass multi-line string to pipe in bash - content after line is sent to cat</span><br>
+			<div class="code">
+				cat &lt;&lt;EOF | grep 'b' | tee b.txt<br>
+				<div class="tab1">
+					> foo<br>
+					> bab<br>
+					> hyu<br>
+					> jabar<br>
+				</div>
+			</div><br>
+			Of the lines written to the multiline string, only the line that<br> have b in them will be printed to the file b.txt and to the screen, with tee command
+		</div>
+	</div>
+</div>
+<hr><hr>
+
+<div class="trick">
+	<div class="explanation">
+		<span class="date">25.06.2022 - 12:40 - Saturday</span>
+		<h4 class="header">Commit message as a parameter</h4>
+		If you have a file that you change frequently, or you got to a situation where you need to change a specific file multiple times<br>
+		<span class="command">read -p "message: " message;git add &lt;file_name&gt;; git commit -m "$message"; git push</span><br>
+		You will be asked for the commit message when you press enter, and the file will be added and commited, each time with the message you want.<br>
+	</div><br>
+	You can take this type of read command at the start of any command you want and it will make a lot of commands much faster.<br>
+	You can also use it as an alias, which also makes things easier.<br>
+</div>
+<hr><hr>
 <div class="trick">
 	<div class="explanation">
 		<span class="date">29.05.2022 - 16:37 - Sunday</span><br>
