@@ -24,6 +24,26 @@ Some stuff that I encounter that everyone should know
 <hr><hr>
 
 <div class="trick">
+	<span class="date">21.08.2022 - 19:07 - Sunday</span>
+	<h4 class="header">Always know the branch that you are in</h4>
+	If you had a project where you have to change a lot of branches, back and forth and to the sides, its very hard to track what branch you are one.<br>
+	So each time you have to do a command <span class="code">git branch</span>, or any other way.<br>
+	There is a way to solve it.<br>
+	Source this function in <span class="command">~/.bashrc</span> file or whenver you want to use it:<br>
+	<div class="code">
+		parse_git_branch() {<br>
+		<span class="space4">git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'</span><br>
+		}
+	</div><br>
+	and define the env var <span class="command">PS1</span> env variable this way:<br>
+	<span class="command">export PS1=">>$(parse_git_branch):"</span><br>
+	If you are inside a repo in a branch called "branchy1", your prompt will look like this:<br>
+	<span class="command">>>(branchy1):</span><br><br>
+	This capability can be used for a whole lot of other functions, just think of one and try it
+<hr><hr>
+</div>
+
+<div class="trick">
 	<div class="grid-container">
 		<div class="eof-inject">
 			<span class="date">25.06.22 - 16:44 - Saturday</span>
