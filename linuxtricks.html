@@ -22,7 +22,22 @@
 Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
-
+<div class="trick">
+	<span class="date">22.08.2022 - 19:07 - Monday</span>
+	<h4 class="header">Print understandable code to the screen</h4>
+	Did you ever got to a situation where your screen is messed up with lines that contain "\t\n" and you just don't understand anything?<br>
+	Well, the next little trick can help you handle that.<br>
+	I had pod logs that contained some spring application errors. It was failing the pod, so it was very important to understand what they mean.<br>
+	They were in a huge line that contained all the java error, I thought only superhuman can understand that.<br>
+	So instead of manipulating the line with some linux tools, like <span class="command">sed</span>, <span class="command">awk</span> and such (which is what most people in my work do)<br>
+	I just used <span class="command">printf</span> to wrap the command:
+	<br><br>
+	<span class="command">printf "$(kubectl logs $(kubectl get pods | grep &lt;pod_name> | awk '{print $1}'))"</span>
+	<br>
+	The output showed me a beautiful java error :)<br>
+	That I still didn't understand :(<br>
+<hr><hr>
+</div>
 <div class="trick">
 	<span class="date">21.08.2022 - 19:07 - Sunday</span>
 	<h4 class="header">Always know the branch that you are in</h4>
