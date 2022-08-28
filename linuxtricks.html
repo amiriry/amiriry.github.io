@@ -23,6 +23,19 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">28.08.2022 - 19:07 - Sunday</span>
+	<h4 class="header">Using 'head' and 'tail' in unique way</h4>
+	Everyone know the basic use of <span class="command">sed</span> and <span class="command">tail</span>.<br>
+	Not everyone know, or use regularly a very helpful vairant of them.<br>
+	You probably got to a situation where you wanted to print all line but multiple lines at the start or at the begining of some output.<br>
+	Well, there's a way to do that, and it very very easy.<br><br>
+	Print all lines from <span class="names1">i-th</span> line to the end:<br>
+	<span class="command">cat file | tail -n +&lt;i></span><br><br>
+	Print all lines from first line to <span class="names1">n-i</span> line:<br>
+	<span class="command">cat file | head -n -&lt;i></span>
+<hr><hr>
+</div>
+<div class="trick">
 	<span class="date">22.08.2022 - 19:07 - Monday</span>
 	<h4 class="header">Print understandable output to the screen</h4>
 	Did you ever got to a situation where your screen is messed up with lines that contain "\t\n" and you just don't understand anything?<br>
