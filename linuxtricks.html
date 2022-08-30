@@ -23,6 +23,21 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">30.08.2022 - 14:12 - Tuesday</span>
+	<h4 class="header">Use vim as an output inspection tool</h4>
+	Like most of linux guys, I used to work with <span class="command">more</span> and <span class="command">less</span> commands, everytime I wanted to inspect an output.<br>
+	After a while, when you get use to linux, it becomes exhusting using the mouse, scroller and any other graphical tool for it.<br>
+	Then <span class="names1"><b>VIM</b></span> get into action.<br>
+	When you get familiar with vim commands ,there's a way to use it as an output inspection tool.<br>
+	Just redirect the output of any command to <span class="command">vim</span> and you will see the output in vim.<br>
+	<span class="command"> >> vim <(&lt;command>)</span><br>
+	Now you can inspect the output with vim commands and in general work with it as you would working with a file, but its <b>NOT</b><br>
+	Just get out of it and the file will not be saved.<br>
+	If you do want to save it, get into <b>command mode</b> in vim and do the command <span class="command">:saveas &lt;path></span><br>
+	Where path is the full path where you want to save the file.
+<hr><hr>
+</div>
+<div class="trick">
 	<span class="date">28.08.2022 - 19:07 - Sunday</span>
 	<h4 class="header">Using 'head' and 'tail' in unique way</h4>
 	Everyone know the basic use of <span class="command">sed</span> and <span class="command">tail</span>.<br>
