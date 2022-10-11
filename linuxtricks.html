@@ -26,12 +26,13 @@ Some stuff that I encounter that everyone should know
 	<span class="date">11.10.2022 - 19:23 - Tuesday</span>
 	<h4 class="header">Not to search in a specific path</h4>
 	If you ever wanted to search in a specific directory but not in a subdirectory of it, there is a good and easy way to do that. <br>
-	Use <span class="comman">find</span> command with <span class="command">-not -path <path></span> parameters for that.<br>
-	The way to do that is:<br>
-	<span class="command">find . -iname file1 -not -path "./dir1/dir2/dir3"</span> - this is for specific path.<br>
-	If you want something more general, like all the paths that contains "dir1/dir2" you should do:<br>
+	Use <span class="comman">find</span> command with <span class="command">-not -path &lt;path></span> patameters, to exclude a path from searching in it.<br>
+	<br>
+	How to use these parameters:<br>
+	<span class="command">find . -iname file1 -not -path "./dir1/dir2/dir3"</span> - Search for <span class="names1">file1</span>, excluding the path <span class="names1">./dir/dir2/dir3.</span><br>
+	If you want something more general, like all the paths that contains <span class="names1">dir1/dir2</span> you should do:<br>
 	<span class="command">find . -iname file1 -not -path "*/dir1/dir2/*"</span><br>
-	In general, it a regular expression, and you can write whatever expression you want and it will be ignored in the search.<br>
+	In general, it is a regular expression, and you can write whatever expression you want and it will be ignored in the search.<br>
 <hr><hr>
 </div>
 <div class="trick">
