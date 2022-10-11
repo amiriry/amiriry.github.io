@@ -23,6 +23,18 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">11.10.2022 - 19:23 - Tuesday</span>
+	<h4 class="header">Not to search in a specific path</h4>
+	If you ever wanted to search in a specific directory but not in a subdirectory of it, there is a good and easy way to do that. <br>
+	Use <span class="comman">find</span> command with <span class="command">-not -path <path></span> parameters for that.<br>
+	The way to do that is:<br>
+	<span class="command">find . -iname file1 -not -path "./dir1/dir2/dir3"</span> - this is for specific path.<br>
+	If you want something more general, like all the paths that contains "dir1/dir2" you should do:<br>
+	<span class="command">find . -iname file1 -not -path "*/dir1/dir2/*"</span><br>
+	In general, it a regular expression, and you can write whatever expression you want and it will be ignored in the search.<br>
+<hr><hr>
+</div>
+<div class="trick">
 	<span class="date">30.08.2022 - 14:12 - Tuesday</span>
 	<h4 class="header">Use vim as an output inspection tool</h4>
 	Like most of linux guys, I used to work with <span class="command">more</span> and <span class="command">less</span> commands, everytime I wanted to inspect an output.<br>
