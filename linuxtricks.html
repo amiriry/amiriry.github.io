@@ -23,6 +23,26 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">12.10.2022 - 18:43 - Tuesday</span>
+	<h4 class="header">Check if a file continue to change over time</h4>
+	This problem came to me when examining logs. I needed to know when a log stops writing.<br>
+	I wanted to do it in one command, without using complicated scripts or some thid party tool. Make it easy with bash command.<br>
+	The command:<br>
+	<div class="command">read -p "time: " time;while true; do file=&lt;file_name>;m1-$(md5sum $file) | awk '{print $1}';sleep $time;m2=$(md5sum $file | awk '{print $1}');if [ $m1 != $m2 ]; then echo -n "File changed - ";else echo -n "file didn't change - ";date "+%H:%M:%S";done</div><br>
+	If you chose 20 for time, it will give you output like this:
+	<div class="command">
+		File changed - 13:51:45<br>
+		File changed - 13:52:05<br>
+		File changed - 13:52:25<br>
+		File didn't change - 13:52:45<br>
+		File didn't change - 13:53:05<br>
+		....
+	</div><br>
+	You are asked for the time you want to wait between checks of the file content. Just wait until you had enough <span class="names1">"File didn't change"</span> and cut the command off, and you know the file didn't change.<br>
+	I, for example chose 20 (The amount of seconds to wait) and just waited for all my screen to be <span class="names1">"File didn't change"</span>. That was enough for me to conclude that the log stopped changing, meaning it not being written to anymore.
+<hr><hr>
+</div>
+<div class="trick">
 	<span class="date">11.10.2022 - 19:23 - Tuesday</span>
 	<h4 class="header">Not to search in a specific path</h4>
 	If you ever wanted to search in a specific directory but not in a subdirectory of it, there is a good and easy way to do that. <br>
