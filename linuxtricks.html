@@ -28,7 +28,7 @@ Some stuff that I encounter that everyone should know
 	This problem came to me when examining logs. I needed to know when a log stops writing.<br>
 	I wanted to do it in one command, without using complicated scripts or some thid party tool. Make it easy with bash command.<br>
 	The command:<br>
-	<div class="command">read -p "time: " time;while true; do file=&lt;file_name>;m1-$(md5sum $file) | awk '{print $1}';sleep $time;m2=$(md5sum $file | awk '{print $1}');if [ $m1 != $m2 ]; then echo -n "File changed - ";else echo -n "file didn't change - ";date "+%H:%M:%S";done</div><br>
+	<div class="command">read -p "time: " time;while true; do file=&lt;file_name>;m1=$(md5sum $file) | awk '{print $1}';sleep $time;m2=$(md5sum $file | awk '{print $1}');if [ $m1 != $m2 ]; then echo -n "File changed - ";else echo -n "file didn't change - ";date "+%H:%M:%S";done</div><br>
 	If you chose 20 for time, it will give you output like this:
 	<div class="command">
 		File changed - 13:51:45<br>
