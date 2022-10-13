@@ -23,7 +23,21 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
-	<span class="date">12.10.2022 - 18:43 - Tuesday</span>
+	<span class="date">13.10.2022 - 17:54 - Thursday</span>
+	<h4 class="header">Backup a file in interval you want - for regular backups while working</h4>
+	Did you ever got to a situation where you needed to backup a file a lot of times once in few seconds/minutes?<br>
+	Who have the time or the power to run <span class="command">cp &lt;file>&lt;id></span> each time? <span class="tab1">(&lt;id> for some identification of this specific backup)</span><br>
+	You have to remember to do that and to find the easiest way to indentify the backup. The basic way is time.<br>
+	So lets do it multiple times, and become a backup master! who only knows how to do one command  :(<br>
+	Instead, you can do this trick:<br>
+	<span class="command">while true;do cp <file> backups/&lt;file>$(date "+%H%M%S");sleep 60;done</span><br>
+	This command will keep creating backups with an interval you choose (in this case 60 seconds), and the most useful thing: its identification will be with the time it is created.<br>
+	You can open new terminal with this command, open new pane in tmux (or any other terminal manager), or put it in the background with '&' in the end of the command.<br>
+	<span class="h4-text">Such low effort for doing something very useful.</span><br><br>
+<hr><hr>
+</div>
+<div class="trick">
+	<span class="date">12.10.2022 - 18:43 - Wednesday</span>
 	<h4 class="header">Check if a file continue to change over time</h4>
 	This problem came to me when examining logs. I needed to know when a log stops writing.<br>
 	I wanted to do it in one command, without using complicated scripts or some thid party tool. Make it easy with bash command.<br>
