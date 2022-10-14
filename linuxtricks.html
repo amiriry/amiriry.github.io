@@ -23,6 +23,19 @@ Some stuff that I encounter that everyone should know
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">13.10.2022 - 15:06 - Thursday</span>
+	<h4 class="header">Input multiple variables in one command</h4>
+	This one came to me when creating my own alarm clock. I wanted to separate hours, minutes and seconds from the same line read from input file.<br>
+	The time look like this:<br>
+	<span class="command">17:25:06</span><br>
+	So I had to find a way to separate the fields and take them one by one as arguments.<br>
+	They command to do that:<br>
+	<span class="command">read -r year month day &lt; &lt;(date "+%Y:%m:%d" | awk -F':' '{print $1, $2, $3}')</span><br>
+	This will give you 3 parameters with corresponding values for year, month and day.<br>
+	You can of course use it for any command you want.<br>
+<hr><hr>
+</div>
+<div class="trick">
 	<span class="date">13.10.2022 - 17:54 - Thursday</span>
 	<h4 class="header">Backup a file in interval you want - for regular backups while working</h4>
 	Did you ever got to a situation where you needed to backup a file a lot of times once in few seconds/minutes?<br>
@@ -50,7 +63,7 @@ Some stuff that I encounter that everyone should know
 		File changed - 13:52:25<br>
 		File didn't change - 13:52:45<br>
 		File didn't change - 13:53:05<br>
-		....
+		....<br>
 	</div><br>
 	You are asked for the time you want to wait between checks of the file content. Just wait until you had enough <span class="names1">"File didn't change"</span> and cut the command off, and you know the file didn't change.<br>
 	I, for example chose 20 (The amount of seconds to wait) and just waited for all my screen to be <span class="names1">"File didn't change"</span>. That was enough for me to conclude that the log stopped changing, meaning it not being written to anymore.
