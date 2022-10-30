@@ -1,0 +1,145 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux History</title>
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="stylesheet" href="../styles/linux_history.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" href="../img/only-my-face.png">
+</head>
+<div class="header-container">
+	<div class="header-container article-header"><h2>Linux History - Present Progressive</h2></div>
+	<div class="header-container back blogs back-header"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+<body>
+
+<p> 
+<span class="date">30.10.2022 - Sunday - 15:49</span>
+<h1>Linux History</h1>
+<h6>This is going to be a continues post - whenver I'll find something new I will add it.</h6>
+<hr>
+<br/>
+<p>
+<p>
+Linux history is such a greate utility of linux.<br>
+If you don't know why I am saying that, this post is for you<br><br>
+
+<div class="color-green">Lets start with a story</div>
+Lets say you executed a very long command few minutes ago.<i class="fa-thin fa-face-sleepy"></i><br />
+Now you have to do it again :( <br>
+You probably don't have the power to write it all again. You would lik a tool for that.<br />
+Did you ever struggled with the up arrow searching for a command you did? <br><br>
+<h3>So How Do You Solve That?</h3>
+You can use all the utilities that are suggested with the <span class="names1">histroy</span> utlities.<br>
+<hr><hr><hr>
+<br>
+<h3>Execute command by its index</h3>
+First of all you can use the basic command with <span class="command">grep &lt;part_of_command></span> and get the command you want.<br>
+For example:
+<div class="command">
+	>> history | grep "list.xml" <br>
+	<div class="space2">
+		<div class="space2">
+			6 cat list.xml<br>
+			7 vim list.xml<br>
+		</div>
+	...<br>
+	900 cat list.xml | grep name <br>
+	</div>
+</div>
+With this output you can do multiple things - <br>
+You can execute a command by its index (the number in the left side):
+<div class="command">!7</div> Or
+<div class="command">!900</div>
+Or any other number that is in the index number<br>
+<br>
+<hr>
+<br>
+<h3>Execute last command</h3>
+Another basic use is to exeute the last command you did.<br>
+Instead if writing the whole command again just do:<br>
+<div class="command">!!</div>
+<br>
+<hr>
+<br>
+<h3>Execute command by counting backwards</h3>
+If you know that the last command was 3 command backward, or any number you have, lets say it n.<br />
+You can use the history exclamation mark with minus after it, and n like this:<br>
+<span class="command">>> !-&lt;n></span>
+For example, you know you want to execute 10 command back:<br>
+<div class="command">>> !-10</div>
+<br>
+<hr>
+<br>
+<h3>Execute command that starts with string you know</h3>
+If you know the starting string of the command you want to do, and its the last time you did a command that start with that string,<br>
+then you can use it with exclamatiom mark.<br>
+For example:
+If the command you want to do is <span class="command">cat /etc/passwd</span> and that's the last time you used cat at the begining of a command<br>
+Then you can do:
+<div class="command">!cat</div>
+This will execute the last command you did that starts with <span class="command">cat</span> which is the command you want <br>
+<br>
+<hr>
+<br>
+<h3>Use command argument in next commands</h3>
+Lets say you used a command that have a very long name in the second argument, for example:<br>
+<div class="command">
+>> ls firstdir second_dir_that_have_a_very_long_name_that_never_ends_and_more
+</div>
+Now, lets say you want to use this name and not have to retype it, or autocomplete it, which both can take minutes......<br>
+So you can do:<br>
+<div class="command">
+	echo first_thing_to-echo !!:2
+</div>
+If you want to use the 7th argument of 3rd command backwards<br>
+<div class="command">
+	echo !-3:7
+</div><br>
+You can use all the rules of history here and add <span class="command">:&lt;num></span> in the end, for using nth argument of the command in history.<br>
+<br>
+<hr>
+<br>
+<h3>Print command</h3>
+In case you only want to print the comnmand in the history then you can do:<br>
+For example you want to print the 20th command backwards:<br>
+<div class="command">>>&nbsp;!-20:p</div>
+Or if you want to print the 15th command backwards 3rd argument:<br>
+<div class="command">>>&nbsp;!-15:p</div>
+Or if you want to print the 50th command 2rd argument:<br>
+<div class="command">>>&nbsp;!50:p</div>
+<br>
+<hr>
+<br>
+<h3>Interactive search of command backwards</h3>
+First of all do <span class="command">&lt;C-r></span> <br>
+You will get this in the command line:<br>
+<span class="command">(reverse-i-search)`':</span><br>
+Start typing and you will get the last command that contains the string you are typing.<br>
+<br>
+<hr>
+<br>
+<h3>Use arguments from the current command line in the command you are in</h3>
+Lets say you want to print the same argument twice in an <span class="command">echo</span> command.<br>
+Lets say again that this argument is very long and you don't want to print it manually twice.<br>
+For example:<br>
+<div class="command">
+>> echo <span class="names2">this_is_a_long_parameter_that_i_dont_want_to_print_manually_twice</span> short_one third
+</div>
+<br>
+What you can do is:<br>
+<div class="command">
+>> echo <span class="names2">this_is_a_long_parameter_that_i_dont_want_to_print_manually_twice</span> short_one third <span class="names2">!#:1</span>
+</div>
+and the output will be:<br>
+<div class="command">
+>> echo <span class="names2">this_is_a_long_parameter_that_i_dont_want_to_print_manually_twice</span> short_one third <span class="names2">this_is_a_long_parameter_that_i_dont_want_to_print_manually_twice</span></div>
+</div>
+<hr>
+<br>
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>
+

@@ -194,6 +194,15 @@ body {
   color: rgb(99, 255, 20);
 }
 
+.names2:hover {
+  text-decoration: underline;
+  color: red;
+}
+
+.color-green {
+  color: indianred;
+}
+
 .command {
   padding: 3px;
   background-color: black;
@@ -236,5 +245,3 @@ a:hover {
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
 /*# sourceMappingURL=post.scss.map */
-
-/*# sourceMappingURL=post.css.map */

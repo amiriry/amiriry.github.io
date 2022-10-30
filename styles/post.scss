@@ -193,6 +193,17 @@ body {
 	}
 }
 
+.names2{
+	&:hover{
+		text-decoration: underline;
+		color: red;
+	}
+}
+
+.color-green{
+	color: indianred;
+}
+
 .command{
 	padding: 3px;
 	background-color: black;
