@@ -140,6 +140,39 @@ and the output will be:<br>
 </div>
 <hr>
 <br>
+<hr>
+<h3>Run a command without using history - multiple ways</h3>
+The first usage is just not put the command in history:<br>
+<span class="command">>> &lt;space>echo "some text"</span><br>
+Just start the command with space and it won't be recognized as a command by history.<br><br>
+To disable history temporarily:<br>
+<div class="command">>> &lt;space>set +o history</div>
+or
+<div class="command">>> &lt;space>shopt -uo history</div>
+<br>
+To enable it back:<br>
+<div class="command">>> &lt;space>set -o history</div>
+or
+<div class="command">>> &lt;space>shopt -so history</div>
+<br>
+
+To disable hisotry for the current session<br>
+<div class="command">>> unset HISTFILE</div>
+This file is where the history is saved. You can see first where it is with <span class="command">echo $HISTFILE</span> or see its content with <span class="command">cat $HISTFILE</span><br>
+After you unset it, no history will be saved. To enable history back, just set it to whatever file you want.<br><br>
+To remove a command from history, first find its number:<br>
+<div class="command">>>history | grep &lt;part_of_command></div>
+output:<br>
+<div class="command">
+...
+101 &lt;command1><br>
+102 &lt;command_to_remove><br>
+103 &lt;command2><br>
+</div>
+Assume you want to the <span class="names1">command_to_remove</span> which is number 102<br>
+So do the command:<br>
+<div class="command">>> history -d 102</div>
+<br>
+<hr>
 <div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
 </body>
-
