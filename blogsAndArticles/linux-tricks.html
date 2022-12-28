@@ -20,11 +20,129 @@
 <p>
 <h4>Linux Tricks - Old tricks to make place for new ones</h4>
 <p>
-I'm going to bring all the tricks that have been enough in the <a href="../index.html">main page</a> of linux tricks to this document.<br>
-To open place to new ones.<br><br>
+Some stuff that I encounter that everyone should know<br><br>
+Becuase I have so many tricks and it never stops....<br>
+I'm creating posts for all the tricks. Get ready to loads of them.<br/><br>
 <h6>This will be a continuous post - when the main page will be full enough, an old trick will come here</h6>
 <hr><hr><hr>
+<div class="trick">
+	<span class="date">12.10.2022 - 18:43 - Wednesday</span>
+	<h4 class="header">Check if a file continue to change over time</h4>
+	This problem came to me when examining logs. I needed to know when a log stops writing.<br>
+	I wanted to do it in one command, without using complicated scripts or some thid party tool. Make it easy with bash command.<br>
+	The command:<br>
+	<div class="command">read -p "time: " time;while true; do file=&lt;file_name>;m1=$(md5sum $file) | awk '{print $1}';sleep $time;m2=$(md5sum $file | awk '{print $1}');if [ $m1 != $m2 ]; then echo -n "File changed - ";else echo -n "file didn't change - ";date "+%H:%M:%S";done</div><br>
+	If you chose 20 for time, it will give you output like this:
+	<div class="command">
+		File changed - 13:51:45<br>
+		File changed - 13:52:05<br>
+		File changed - 13:52:25<br>
+		File didn't change - 13:52:45<br>
+		File didn't change - 13:53:05<br>
+		....<br>
+	</div><br>
+	You are asked for the time you want to wait between checks of the file content. Just wait until you had enough <span class="names1">"File didn't change"</span> and cut the command off, and you know the file didn't change.<br>
+	I, for example chose 20 (The amount of seconds to wait) and just waited for all my screen to be <span class="names1">"File didn't change"</span>. That was enough for me to conclude that the log stopped changing, meaning it not being written to anymore.
+<hr><hr>
+</div>
+<div class="trick">
+	<span class="date">11.10.2022 - 19:23 - Tuesday</span>
+	<h4 class="header">Not to search in a specific path</h4>
+	If you ever wanted to search in a specific directory but not in a subdirectory of it, there is a good and easy way to do that. <br>
+	Use <span class="comman">find</span> command with <span class="command">-not -path &lt;path></span> patameters, to exclude a path from searching in it.<br>
+	<br>
+	How to use these parameters:<br>
+	<span class="command">find . -iname file1 -not -path "./dir1/dir2/dir3"</span> - Search for <span class="names1">file1</span>, excluding the path <span class="names1">./dir/dir2/dir3.</span><br>
+	If you want something more general, like all the paths that contains <span class="names1">dir1/dir2</span> you should do:<br>
+	<span class="command">find . -iname file1 -not -path "*/dir1/dir2/*"</span><br>
+	In general, it is a regular expression, and you can write whatever expression you want and it will be ignored in the search.<br>
+<hr><hr>
+</div>
+<div class="trick">
+	<span class="date">30.08.2022 - 14:12 - Tuesday</span>
+	<h4 class="header">Use vim as an output inspection tool</h4>
+	Like most of linux guys, I used to work with <span class="command">more</span> and <span class="command">less</span> commands, everytime I wanted to inspect an output.<br>
+	After a while, when you get use to linux, it becomes exhusting using the mouse, scroller and any other graphical tool for it.<br>
+	Then <span class="names1"><b>VIM</b></span> get into action.<br>
+	When you get familiar with vim commands ,there's a way to use it as an output inspection tool.<br>
+	Just redirect the output of any command to <span class="command">vim</span> and you will see the output in vim.<br>
+	<span class="command">vim <(&lt;command>)</span><br>
+	Now you can inspect the output with vim commands and in general work with it as you would working with a file, but its <b>NOT</b><br>
+	Just get out of it and the file will not be saved.<br>
+	If you do want to save it, get into <b>command mode</b> in vim and do the command <span class="command">:saveas &lt;path></span><br>
+	Where path is the full path where you want to save the file.
+<hr><hr>
+</div>
+<div class="trick">
+	<span class="date">28.08.2022 - 19:07 - Sunday</span>
+	<h4 class="header">Using 'head' and 'tail' in unique way</h4>
+	Everyone know the basic use of <span class="command">sed</span> and <span class="command">tail</span>.<br>
+	Not everyone know, or use regularly a very helpful vairant of them.<br>
+	You probably got to a situation where you wanted to print all line but multiple lines at the start or at the begining of some output.<br>
+	Well, there's a way to do that, and it very very easy.<br><br>
+	Print all lines from <span class="names1">i-th</span> line to the end:<br>
+	<span class="command">cat file | tail -n +&lt;i></span><br><br>
+	Print all lines from first line to <span class="names1">n-i</span> line:<br>
+	<span class="command">cat file | head -n -&lt;i></span>
+<hr><hr><hr>
+</div>
+<div class="trick">
+	<span class="date">22.08.2022 - 19:07 - Monday</span>
+	<h4 class="header">Print understandable output to the screen</h4>
+	Did you ever got to a situation where your screen is messed up with lines that contain "\t\n" and you just don't understand anything?<br>
+	Well, the next little trick can help you handle that.<br>
+	I had pod logs that contained some spring application errors. It was failing the pod, so it was very important to understand what they mean.<br>
+	They were in a huge line that contained all the java error, I thought only superhuman can understand that.<br>
+	So instead of manipulating the line with some linux tools, like <span class="command">sed</span>, <span class="command">awk</span> and such (which is what most people in my work do)<br>
+	I just used <span class="command">printf</span> to wrap the command:
+	<br><br>
+	<span class="command">printf "$(kubectl logs $(kubectl get pods | grep &lt;pod_name> | awk '{print $1}'))"</span>
+	<br>
+	The output showed me a beautiful java error :)<br>
+	That I still didn't understand :(<br>
+<hr><hr><hr>
+</div>
+<div class="trick">
+	<span class="date">21.08.2022 - 19:07 - Sunday</span>
+	<h4 class="header">Always know the branch that you are in</h4>
+	If you had a project where you have to change a lot of branches, back and forth and to the sides, its very hard to track what branch you are one.<br>
+	So each time you have to do a command <span class="code">git branch</span>, or any other way.<br>
+	There is a way to solve it.<br>
+	Source this function in <span class="command">~/.bashrc</span> file or whenver you want to use it:<br>
+	<div class="code">
+		parse_git_branch() {<br>
+		<span class="space4">git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'</span><br>
+		}
+	</div><br>
+	and define the env var <span class="command">PS1</span> env variable this way:<br>
+	<span class="command">export PS1=">>$(parse_git_branch):"</span><br>
+	If you are inside a repo in a branch called "branchy1", your prompt will look like this:<br>
+	<span class="command">>>(branchy1):</span><br><br>
+	This capability can be used for a whole lot of other functions, just think of one and try it
+<hr><hr>
+</div>
 
+<hr><hr><hr>
+<div class="trick">
+	<div class="explanation">
+		<span class="date">19.05.2022 - 16:09 - Thursday</span><br>
+		<h4 class="header">Reclick - refresh without doing anything, or even notice</h4>
+		Did you ever had to refresh the screen multiple times to see the result? 
+		For example when you started a machine in the cloud and wanted to get to "working" state, but you had to press refresh time and time again.<br>
+		Each time you have to take the cursor from where you are to the place where the refresh is and come back to where you were before.<br>
+		In addition, you had to change context multiple times.<br>
+		There's a script you can use to do that <a href="https://raw.githubusercontent.com/amiriry/Linux/main/scripts/reclick.sh" target="_blank">here</a><br>
+		First of all install xdotool <span class="command">>> apt install xdotool</span>
+	</div>
+	<span class="command">>> read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Read from mouslocation, current x and y. This command reads first two variables that comes from the command in the parentheses.<br>
+	<span class="reclick-secondline">Then you are asked to move to the location in the screen where you want to click multiple times</span><br>
+	<span class="command">>> read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Take the coordinates where you want to go<br>
+	<span class="command">>> xdotool mousemove $cx $cy</span> - Move to where the script was started - current place<br>
+	Then you are asked for the delay between clicks.<br>
+	In the end, a while loop that take saves your current place, as above, and moves back and forth between your current place and the goto place in intermission of the time you mentioned for delay.
+	<br><br>
+</div>
+<hr><hr><hr>
 <div class="trick">
 	<div class="explanation">
 		<span class="date">14.05.2022 - 19:37 - Saturday</span>
@@ -69,26 +187,6 @@ To open place to new ones.<br><br>
 		>> echo "some thing to copy to blipboard" | cp2clip
 	</div>
 	Now you can use <span class="ctrl-key">ctrl+v</span> to paste it wherever you want
-	<br><br>
-</div>
-<hr><hr><hr>
-<div class="trick">
-	<div class="explanation">
-		<span class="date">19.05.2022 - 16:09 - Thursday</span><br>
-		<h4 class="header">Reclick - refresh without doing anything, or even notice</h4>
-		Did you ever had to refresh the screen multiple times to see the result? 
-		For example when you started a machine in the cloud and wanted to get to "working" state, but you had to press refresh time and time again.<br>
-		Each time you have to take the cursor from where you are to the place where the refresh is and come back to where you were before.<br>
-		In addition, you had to change context multiple times.<br>
-		There's a script you can use to do that <a href="https://raw.githubusercontent.com/amiriry/Linux/main/scripts/reclick.sh" target="_blank">here</a><br>
-		First of all install xdotool <span class="command">>> apt install xdotool</span>
-	</div>
-	<span class="command">>> read -r cx cy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Read from mouslocation, current x and y. This command reads first two variables that comes from the command in the parentheses.<br>
-	<span class="reclick-secondline">Then you are asked to move to the location in the screen where you want to click multiple times</span><br>
-	<span class="command">>> read -r gx gy < <(xdotool getmouselocation | awk -F'[ :]' '{print $2 , $4}')</span> - Take the coordinates where you want to go<br>
-	<span class="command">>> xdotool mousemove $cx $cy</span> - Move to where the script was started - current place<br>
-	Then you are asked for the delay between clicks.<br>
-	In the end, a while loop that take saves your current place, as above, and moves back and forth between your current place and the goto place in intermission of the time you mentioned for delay.
 	<br><br>
 </div>
 <hr><hr><hr>
