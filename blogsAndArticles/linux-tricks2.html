@@ -24,6 +24,17 @@ Some stuff that I encounter that everyone should know<br>
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">02.01.2023 - 17:32 - Monday</span>
+	<h4 class="header">Take from output line by number and more lines by text</h4>
+	Did you ever got to a situation where you wanted to do grep to two lines, but one of them is by its numebr?<br>
+	In my case I wanted to have the output of <span class="command">kubectl get pods</span>  with grep on some name, and have the headers too.<br>
+	After a bit of struggeling I got to this command:<br>
+	<div class="command">kubectl get deploy | awk 'NR==1 || /some_pod_name/'</div>
+	In this case, you will get the first line, that contains the headers, and the pods that contains the name you put inside '//'.<br>
+	Now think about how much complicated it can get....<br>
+	You can learn all about it in the blog post on awk.<br>
+<hr><hr>
+</div>
 <div class="trick">
 	<span class="date">28.12.2022 - 15:06 - Wednesday</span>
 	<h4 class="header">Find lines that contains a string and comes after another line</h4>
