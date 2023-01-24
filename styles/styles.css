@@ -337,6 +337,9 @@ section {
 .about-stats .progress-bars .progress-bar .progress-con .progress .terraform {
   width: 70%;
 }
+.about-stats .progress-bars .progress-bar .progress-con .progress .kubernetes {
+  width: 85%;
+}
 
 .stat-title {
   text-transform: uppercase;
