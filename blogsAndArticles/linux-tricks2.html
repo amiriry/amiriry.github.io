@@ -24,6 +24,25 @@ Some stuff that I encounter that everyone should know<br>
 <hr>
 <hr><hr>
 <div class="trick">
+	<span class="date">29.01.2023 - 17:32 - Sunday</span>
+	<h4 class="header">Aggregate files in one file and separate them when needed</h4>
+	I had a situation where I had a pod that was deleted pertty fast, and I had to take files from it <br>
+	and copy directory didn't work for some reason :( <br>
+	So as always, <span class="names1">for loop</span> came to the rescue!.<br><br>
+	<div class="command">
+		>> for f in $(ls);do echo "$f:" >> aggregated;cat $f >> aggregated;echo endoffile>> aggregated;done
+	</div>
+	Here I am going over all the files in the directory, and print them to a file with a specific separator "endoffile".<br>
+	This can obviously be whatever you want.<br>
+	I copied the file to my computer (at least I could do that...)<br>
+	And then I separated all the files into multiple files(myfiles where html, use whatever regular expression that meets your needs):<br>
+	<div class="command">for f in $(egrep -Ris "\.html:" aggregated;do cat aggregated | sed -n "/$f:/,/endoffile/ p" | head -n -1 > $f;done )</div>
+	If I write the needed commands before the pod is up, I just copy them and I don't need <br>
+	more than a second or 2 to get all the files that were in the directory.<br>
+	You can use that in any situtation that you need to copy a lot of files very fast<br><br>
+</div>
+<hr><hr>
+<div class="trick">
 	<span class="date">03.01.2023 - 17:32 - Tuesday</span>
 	<h4 class="header">Open multiple terminals and do a command on each</h4>
 	Very easy to do if you track my tricks, but still something that I needed to do once to see that it works.<br>
