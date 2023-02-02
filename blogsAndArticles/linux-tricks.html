@@ -14,7 +14,6 @@
 </div>
 </head>
 <body>
-<span class="date">24.11.2022 - Thursday - 14:17</span>
 
 
 <p>
@@ -121,6 +120,58 @@ Some stuff that I encounter that everyone should know - new post<br><br>
 <hr><hr>
 </div>
 
+<hr><hr><hr>
+<div class="trick">
+	<div class="grid-container">
+		<div class="eof-inject">
+			<span class="date">25.06.22 - 16:44 - Saturday</span>
+			<h4 class="header">Use EOF fo injecting multiple line argument to a command</h4>
+			Did you ever had a situation where you needed some long string in your command line, or just an easier way to write variable in your cli?<br>
+			Well, there's a way to do that.<br>
+			Use <span class="command">&lt;&lt;EOF</span> and the command line will ask you for that!<br>
+			HOW TO DO THAT?<br>
+		</div>
+		<div class="cmd1">
+			<span class="h4-text">Multiline string as a shell variable:</span><br>
+			<div class="code">
+				$ sql=$(cat &lt;&lt;EOF<br>
+				<div class="tab1">
+					> SELECT foo, bar from db<br>
+					> WHERE foo='baz'<br>
+					> EOF<br>
+					> )
+				</div>
+			</div><br>
+			$sql will contain the whole query as a text
+		</div><br>
+		<div class="cmd2">
+			<span class="h4-text">Pass multi-line string to a file with redirection</span><br>
+			<div class="code">
+				$ cat &lt;&lt;EOF > print.sh<br>
+				<div class="tab1">
+					> #!/bin/bash<br>
+					> echo \$PWD<br>
+					> echo $PWD<br>
+					> EOF<br>
+				</div>
+			</div><br>
+			The file print.sh will contain whatever is written in the multiline lines
+		</div>
+		<div class="cmd3">
+			<span class="h4-text">Pass multi-line string to pipe in bash - content after line is sent to cat</span><br>
+			<div class="code">
+				cat &lt;&lt;EOF | grep 'b' | tee b.txt<br>
+				<div class="tab1">
+					> foo<br>
+					> bab<br>
+					> hyu<br>
+					> jabar<br>
+				</div>
+			</div><br>
+			Of the lines written to the multiline string, only the line that<br> have b in them will be printed to the file b.txt and to the screen, with tee command
+		</div>
+	</div>
+</div>
 <hr><hr><hr>
 <div class="trick">
 	<div class="explanation">

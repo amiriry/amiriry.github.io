@@ -23,6 +23,22 @@ Some stuff that I encounter that everyone should know<br>
 <h6>The older ones are here <a href="linux-tricks.html">old tricks</a></h6>
 <hr>
 <hr><hr>
+<div class="tricks"></div>
+	<span class="date">02.01.2023 - 18:34 - Wednesday</span>
+	<h4 class="header">Redicredt printed lines into file - print mlutiple lines to file</h4>
+	I always wanted to have a script that writes files, however I want, and not line by line with redirection.<br>
+	Today I found the way, and I already wrote about it but forgot.<br>
+	<div class="code">
+		cat &lt;&lt;EOF > file <br>
+		This is going to be a file<br>
+		All of this is going to be written to a file <br>
+		as one file and not line by line.<br>
+		In this case you don't have to write lines after line with redirection as I did before<br>
+		EOF
+	</div><br>
+	You can look at an example of creating a repo, with sed commads, editing, adding or removing lines with cli commands<br>
+		<a href="https://github.com/amiriry/Linux/blob/main/scripts/create_git_repo.sh">link</a>
+<hr><hr>
 <div class="trick">
 	<span class="date">29.01.2023 - 17:32 - Sunday</span>
 	<h4 class="header">Aggregate files in one file and separate them when needed</h4>
