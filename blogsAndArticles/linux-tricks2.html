@@ -28,12 +28,12 @@ Some stuff that I encounter that everyone should know<br>
 	<h4 class="header">Put everything together - Autocompletion with for loop</h4>
 	A lot of my tricks are for saving time.<br>
 	In this case again, saving time and a lot of mess<br>
-	I needed to know the capacity of all nodes of 10 different clusters in openshift....<br>
+	I needed to know the capacity of all nodes with specific name, of 10 different clusters in openshift....<br>
 	You would assume its a lot of work, and it is...<br>
 	But if you use Autocompletion(The <a href="control_everything_command.html">Post</a>) and for loop(The <a href="for-loop-cmds.html">Post</a>) wisely you can dodge all of this.<br>
 	<div class="command">for i in $(echo 1 2 3 4 7 9 10 12 15 26 30);do echo "$i:";poiuytrewq clusterconnectbynum $i;for n in $(oc get nodes | grep "^worker" | awk '{print $1}');do echo "$n:";oc get nodes $n -o jsonpath='{.status.capacity}';done;</div><br>
 	Notice the command <span class="command">poiuytrewq</span> which is a general command from the post above.<br> 
-	It have a sunbcommand <span class="command">clusterconnectbynum</span>, that connects to cluster by number.<br>
+	It have a subcommand <span class="command">clusterconnectbynum</span>, that connects to cluster by number.<br>
 	Then, with <span class="command">for loop</span>, I go over all nodes that have "worker" in them, take the name and get the capacity with the right jsonpath.<br>
 	Its not just very easy, the output can be edited however you want, you can redirect it or whatever you want.<br>
 	I chose to print the number of the cluster, then print each worker and its capacity.<br>
