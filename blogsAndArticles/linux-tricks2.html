@@ -23,7 +23,29 @@ Some stuff that I encounter that everyone should know<br>
 <h6>The older ones are here <a href="linux-tricks.html">old tricks</a></h6>
 <hr>
 <hr><hr>
-<div class="trick"></div>
+
+<div class="trick">
+<span class="date">06.01.2023 - 19:30</span>
+<h4 class="header">Put everything together - Autocompletion with for loop</h4>
+	A lot of my tricks are for saving time.<br>
+	This trick is not different :)<br><br>
+
+	For a task that I did, I wanted to know the capacity of the workers of 10 different clusters in openshift...<br>
+	Seems like a tedious task<br>
+	<span class="names2">BUT!!!</span> its not that tedious, or even very very easy if you use a command with autocompletion(<a href="control_everything_command.html">Autocompletion Post</a>) and for loops(<a href="for-loop-cmds.html">For loops Post</a>) together!<br>
+	Lets assume you already have a command that does everything, and you just add it a subcommand that connects to cluster by number, lets call it <div class="command">clusterconnectbynum</div>
+	You give it a number and it connects to the cluster.<br>
+	So you only need to do 
+	<div class="command">poiuytrewq clusterconnectbynum &lt;number&gt;</div>
+	When you are connected to the cluster, first you have to find all worker nodes, lets assume their name starts with <span class="names1">"workernode"</span>.<br> 
+	After you found them you need to do the right jsonpath query on each one of them, to get capacity.<br>
+	So to sum it up, instead of getting into each cluster and do the command, you just need to do:<br>
+	<div class="command">for i in $(echo 1 2 3 4 5 6 7 8 9 10);do echo "$i";poiuytrewq clusterconnectbynum $i;for n in $(oc get nodes | grep "workernode" | awk '{print $1}');do echo "$n";oc get nodes $n -o jsonpath='{.status.capacity}';done</div><br>
+	And again - for comes to the rescues, now as for within for.
+<hr><hr>	
+</div>
+<hr><hr>
+<div class="trick">
 	<span class="date">02.01.2023 - 18:34 - Wednesday</span>
 	<h4 class="header">Redicredt printed lines into file - print mlutiple lines to file</h4>
 	I always wanted to have a script that writes files, however I want, and not line by line with redirection.<br>
@@ -38,6 +60,7 @@ Some stuff that I encounter that everyone should know<br>
 	</div><br>
 	You can look at an example of creating a repo, with sed commads, editing, adding or removing lines with cli commands<br>
 		<a href="https://github.com/amiriry/Linux/blob/main/scripts/create_git_repo.sh">link</a>
+</div>
 <hr><hr>
 <div class="trick">
 	<span class="date">29.01.2023 - 17:32 - Sunday</span>

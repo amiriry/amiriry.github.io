@@ -186,17 +186,17 @@ body {
 }
 
 .names1{
-	color: red;
-	text-decoration: underline;
+	color: rgb(255,255,0);
 	&:hover{
 		color: rgb(99,255,20);
 	}
 }
 
 .names2{
+	color: rgb(255,153,51);
 	&:hover{
 		text-decoration: underline;
-		color: red;
+		color: rgb(0,255,255);
 	}
 }
 
