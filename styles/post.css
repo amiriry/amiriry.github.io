@@ -128,6 +128,23 @@ body {
   line-height: 1;
 }
 
+.important-box {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  border: 2px solid red;
+  color: yellow;
+}
+
+.important-box-try {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 37%;
+  border: 2px solid red;
+  color: yellow;
+  line-height: 1.2;
+}
+
 .code {
   display: inline-block;
   box-sizing: border-box;
