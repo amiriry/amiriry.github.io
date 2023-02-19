@@ -48,6 +48,31 @@ body {
   text-align: center;
   padding: 10px;
 }
+.frac{
+	display: inline-block;
+	font-size: 50%;
+	text-align: center;
+	& > sup {
+		display: block;
+		border-bottom: 1px solid;
+		font: inherit
+	}
+	& > span {
+		display: none;
+	}
+	& > sub {
+		display: block;
+		font: inherit;
+	}
+}
+
+.numerator {
+
+}
+
+.denominator {
+
+}
 
 .ctrl-key {
 	text-transform: uppercase;

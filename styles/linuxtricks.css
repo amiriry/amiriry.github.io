@@ -28,26 +28,6 @@
   font-weight: 700;
 }
 
-.tab1 {
-  display: inline-block;
-  margin-left: 20px;
-}
-
-.tab2 {
-  display: inline-block;
-  margin-left: 35px;
-}
-
-.tab3 {
-  display: inline-block;
-  margin-left: 50px;
-}
-
-.tab4 {
-  display: inline-block;
-  margin-left: 65px;
-}
-
 .grid-container {
   display: grid;
   grid-template-areas: "explain explain explain explain" "left main right right";

@@ -51,6 +51,24 @@ body {
   padding: 10px;
 }
 
+.frac {
+  display: inline-block;
+  font-size: 50%;
+  text-align: center;
+}
+.frac > sup {
+  display: block;
+  border-bottom: 1px solid;
+  font: inherit;
+}
+.frac > span {
+  display: none;
+}
+.frac > sub {
+  display: block;
+  font: inherit;
+}
+
 .ctrl-key {
   text-transform: uppercase;
   font-weight: 900;
