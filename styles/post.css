@@ -51,6 +51,14 @@ body {
   padding: 10px;
 }
 
+.min-20-margin-top {
+  margin-top: -20px;
+}
+
+.fontsize-50 {
+  font-size: 50px;
+}
+
 .frac {
   display: inline-block;
   font-size: 50%;
