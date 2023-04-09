@@ -98,6 +98,24 @@ Some stuff that I encounter that everyone should know - new post<br><br>
 	<br>
 	The output showed me a beautiful java error :)<br>
 	That I still didn't understand :(<br>
+	---<br>
+	<span class="date">09.04.2023 - 18:41 - Sunday</span><br>
+	<h4 class="header">Addition</h4>
+	you might get to a situation where you have some unprintable characters.<br>
+	It might fail the command with the error:<br>
+
+	<div class="command">
+		-bash : printf --:invalid option <br>
+		printf: usage printf [-v var] format [arguments]<br>
+	</div>
+	In this case as you can see the error was <span class="command"> - </span>&nbsp;  somewhere where it shouldn't be.<br>
+	In some outputs its very logical to get '-' or '--'.<br>
+	So to overcome this is with:<br>
+	<div class="command">>> printf -- "$(&lt;command>)"</div>
+	'--' Before the command means that everything after this is the literal character it is, not evaluated, meaning it will be treated as literal<br><br>
+	If you try this after this kind of errors it will succeed.<br>
+	<span class="color-green">And if not</span>, for now I still didin't encounter this situation :).<br> 
+	Raise it to me, or when I'll find it I'll write about it here.
 <hr><hr><hr>
 </div>
 <div class="trick">
