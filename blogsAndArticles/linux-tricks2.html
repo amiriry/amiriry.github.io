@@ -25,6 +25,24 @@ Some stuff that I encounter that everyone should know<br>
 <hr><hr>
 
 <div class="trick">
+<span class="date">26.04.2023 19:20</span>
+<h4 class="header">Define output of a command as environment variables</h4>
+Sometimes you have some variables inside a file that you want to be sources.<br>
+Like if for example you have a parameters file for charts, and you only need a specific charts parameters.<br>
+You want it to be sourced in the middle of a script, ot any other thing.<br>
+In that case you need to source only the output of the command that gets you these variables:<br>
+<div class="command">grep CHART_NAME variablesfile.txt</div>
+output
+<div class="command">
+	CHART_name=&lt;name><br>
+	CHART_VERSION=&lt;version><br>
+	SPECIFIC_CHART_INFO=&lt;info>
+</div><br>
+Just put <span class="command">source</span> at the begining of the command, and you'll get them as environmen variables:<br>
+<div class="command">source &lt(grep CHART_NAME variablesfile.txt)</div>
+<hr><hr>
+</div>
+<div class="trick">
 <span class="date">24.02.2023 18:36</span>
 <h4 class="header">When you want to curl something with spaces</h4>
 	I needed to check some api of mine.<br>
