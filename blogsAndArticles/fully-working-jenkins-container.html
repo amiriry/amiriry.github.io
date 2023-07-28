@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jenkins container1</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="icon" href="../img/only-my-face.png">
+</head>
+
+<div class="header-container">
+	<div class="header-container article-header"><h2>Create an image of jenkins container with no installation and local repo</h2></div>
+	<div class="header-container back blogs back-header"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+<body>
+
+<p>
+<h4 class="post_title">Jenkins container - no installation + local repo</h4>
+<p>
+How to create a jenkins docker image, without the need of manual steps and enale local repo for Jenkinsfile<br>
+Lets start with the issue.<br>
+The issue I had is that I wanted to have a very fast working image of jenkins because I wanted to check lots of Jenkinsfiles an each time change oneline or even a parameter name.<br>
+When I started using the jenkins/jenkins image, I had to go through manual installation that looks like this<br>
+
+The process will look something like this:<br>
+<span class="command">docker run -td -p 8080:8080 jenkins/jenkins</span><br>
+<img src="../img/unlockJenkins.png"><br>
+Then the command:<br>
+<span class="command">docker exec &lt;container_name> cat /var/jenkins_home/secrets/initialAdminPassword</span><br>
+Paste the output, and get to this screen:<br>
+<img src="../img/CustomizeJenkikns.png"><br>
+No matter what I choose from here, it takes a lot of time.<br>
+1. If I choose "Install suggested plugins" - it takes a lot of time, there are a lot suggested plugins<br>
+<span class="tab1"></span>And the more wasting time problem - I have to do that everytime I start this container.<br> 
+2. "Select plugins to install" - Creates multiple problems:<br>
+<span class="tab1"></span>What plugins to choose, time it takes to install them, mark the plugins I want, go over all the plugins, and more<br>
+Both choices are wasting time, probably a lot of time.<br><br>
+<div class="names1">So can be done?</div>
+We can build and image out of <span class="names2">jenkins/jenkins</span> image with the right arguments so that the plugins will be installed
+only once, and the image will be used with those plugins.<br>
+The first option will stop SetupWizard from running at initialization, to not waste my time:<br>
+<span class="command">-Djenkins.install.runSetupWizard=false</span><br>
+The second line is a <span class="command">RUN</span> directive that will use jenkins tool named <br>
+<span class="command">jenkins-plugin-cli</span> <br>
+to install plugins that I listed in a file named <span class="command">/usr/share/jenkins/ref/recommended-plugins.txt</span><br>
+<span class="command">RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/recommended-plugins.txt </span>
+<br><br>
+<hr>
+<h3>Local Repo</h3>
+Another issue that I had is that I wanted jenkins to use a directory from my computer as the repo, as the place where Jenkins file is.<br>
+I already had some code that wanted to integrate into the pipeline.<br>
+Jenkins is not doing it by default, so I had to give it another option:<br>
+<span class="command">-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true</span><br>
+This option enable the option to use local repository as a repository of the pipeline.<br>
+Now all I need to do is to <span class="names2">mount the directory</span> where I had the Jenkins file as a volume, and then just use it as a git repo for the pipeline.<br><br>
+
+Whats left is to create the image that I will use whenever I want to create new jenkins container with all this capabilities.<br>
+
+The <span class="names1">Dockerfile</span> looks like this:<br>
+<div class="file">
+	FROM jenkins/jenkins<br>
+	ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"<br>
+	COPY recommended-plugins.txt /usr/share/jenkins/ref/recommended-plugins.txt<br>
+</div><br>
+Notice how I added both options to the JAVA_OPTS environemnt variable, it contains both of the options mentioned.<br>
+Now it needs to be built:<br>
+<span class="command">docker built -t jenkins:noinstallation-enablelocalrepo .</span><br>
+After this command, we can start a container and see what happens.<br>
+<hr>
+<h3>Starting the container</h3>
+<span class="command">docker run --name myjenkins -td -p 8080:8080 -v /home/user/gitrepo:/var/pipelines jenkins:noinstallation-enablelocalrepo </span><br>
+Obviously, <span class="command">/home/user/gitrepo</span> should be a git repo, and contain Jenkinsfile in it.<br>
+Enter name like "firstproject" and choose "Pipeline" from the list.<br>
+<img src="../img/create-pipeline.png"><br>
+Press "OK"<br><br>
+Under "Pipeline", choose "Pipeline script from SCM" from definition options<br>
+Under "SCM" choose "Git"<br>
+In "Repository URL" put the path you mounted as volume, where Jenkinsfile is - in this case <span class="command">/var/pipelines</span>
+<img src="../img/define-pipeline.png"><br>
+If there is no repo like that you should see<br>
+<img src="../img/error-repository.not-reachable.png"><br>
+Otherwise, there should be no error there. If you created a git repo on the volume mounted it should be ok.<br>
+If the pipeline has no errors, you can now build it, and everything should be fine.<br>
+<br>
+I used very basic pipeline here, just to show that it works:<br>
+<div class="file">
+pipeline {<br>
+<div class="tab1">
+  agent any<br>
+  stages {<br>
+  <div class="tab1">
+	  stage('first'){<br>
+	  <div class="tab1">
+		  steps {<br>
+		  &nbsp;&nbsp;echo 'checking'<br>
+		  }<br>
+	  </div><br>
+	  }<br>
+  </div><br>
+	}<br>
+</div><br>
+}<br>
+</div>
+
+<hr>
+<div class="back blogs"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</body>
