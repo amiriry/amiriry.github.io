@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jenkins container1</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../styles/post.css">
+  <link rel="icon" href="../img/only-my-face.png">
+</head>
+
+<div class="header-container">
+	<div class="header-container article-header"><h2>Using the image created in post mentioned to test shared library</h2></div>
+	<div class="header-container back blogs back-header"><a href="../index.html"><i class="fa-solid fa-house"></i></a></div>
+</div>
+<body>
+
+<p>
+<span class="date">08.08.2023 - Tuesday</span>
+<h4 class="post_title">Jenkins with shared library</h4>
+<p>
+You can read this post directly, but it assumes the knowledge from this <a href="fully-working-jenkins-container.html">post</a> <br>
+The shared lib will work with the image that was created in this post.<br><br><hr>
+I like to start this by creating a designated directory for this project.<br>
+<div class="command">mkdir sharedLibProject</div>
+Now I will create a specific directory for the sharedLib:<br>
+<div class="command">mkdir sharedLibrary</div>
+You can clone the specific directory of the sharedlib into the dir created with the method mentioned in <a href="https://github.com/amiriry/Devops/tree/main/Jenkins/SharedLibraryProject">README</a> of this project.<br>
+It is mentioned under the header: <span class="names2">Clone only sharedlib dir with sparse checkout</span>.<br> 
+Instead, you can clone the whole project and copy only the needed dirs.<br><br>
+If you create it by yourself, the directory structure must be like in the image:<br>
+<img src="../img/sharedLibDirTree.png"><br>
+The files in the <span class="command">vars</span> dir are groovy files that can be used as steps in the pipeline(I will elaborate on it later).<br>
+---<br>
+For having yaml files defining arguments in my pipline, I will create another directory that will contain them:<br>
+<div class="command">mkdir configfiles</div>
+And create a git repository to contain Jenkinsfile that the jenkins configuration will look at, like in the last <a href="fully-working-jenkins-container.html">post</a> mentioned, under the <span class="names1">Pipeline definition</span><br>
+I want to make the directory of Jenkinsfile, a git repo for jenkins to use as the <span class="names1">Script from SCM</span> directory.<br>
+So I will do the next commands:<br>
+<div class="command">
+git -C pipelines add Jenkinsfile<br>
+git -C pipelines commit -m "Jenkins file with sharedLib"
+</div>
+The <span class="command">-C</span> flag enables doing the git command when I am in other directory, the general project dir that I am currently in.<br>
+<br>
+Now I will copy the shared library in this project and the configfiles directory which contains only one file for this example:<br>
+<div class="command">
+cp -r ../configfiles configfiles<br>
+cp -r ../sharedLibrary sharedLib
+</div><br>
+As ealier, I want to make sharedLib a git repo, for the pipeline to be able to load with <span class="names2">library</span> directive, and add files, using the <span class="command">-C</span> flag<br>
+<div class="command">
+git init sharedLib<br>
+git -C sharedLib add .<br>
+git -C sharedLib commit -m "all shared lib content"<br>
+</div><br>
+<hr>
+I want to run a container ,with jenkins on it, that will be able to read the yaml files from <span class="command">configfiles/</span> dir and use values in those files.<br>
+To read yaml files I will need to use the directive <span class="command">readYaml</span> of jenkins.<br>
+To use that I have to have the plugin - <span class="names2">pipeline-utility-steps</span>(<a href="https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/">docs</a>) installed.<br>
+I will take the image from the <a href="fully-working-jenkins-container.html">post</a> and add the name of the plugin to the plugins listed in the file <a href="https://github.com/amiriry/Devops/blob/main/Jenkins/containers/no-plugins-installation-needed/recommended-plugins.txt">recommended-plugins.txt</a>.<br>
+If I followed the process in the post mentioned, it will be installed with the <span class="command">jenkins-plugin-cli</span> tool.<br>
+you can see the usage <a href="https://github.com/amiriry/Devops/blob/main/Jenkins/containers/no-plugins-installation-needed/Dockerfile">here</a> in line 8.<br><br>
+Lets assume I called the new jenkins image(that have the plugin mentined installed in it) - <br><span class="names2">jenkins:v3</span><br> The command to start the container:<br>
+<div class="command">
+docker run --name myjenkins -td -p 8080:8080 -v $(pwd)/pipelines/:/var/pipelines -v $(pwd)/sharedLib/:/var/sharedLib -v $(pwd)/configfiles:/var/configfiles jenkins:v3
+</div>
+Obviously name and local port can be chosen for whatever you want<br>
+<hr>
+<br><div class="underline">Jenkinsfile - <span class="names1">library</span> directive:</div>
+The important part in the jenkins file that loads the shared library is:<br>
+<div class="file">
+	library identifier: 'SharedLibrary@master',<br>
+			  retriever: modernSCM([$class: 'GitSCMSource', remote: "/var/sharedLib"]),<br>
+			  changelog: false<br>
+</div><br>
+The <span class="command">library</span> directive is loading a library, in this case it is used a <span class="command">retriever</span> method.<br>
+Its named <span class="command">modernSCM</span> and the <span class="names1">GitSCMSource</span> class, which clones a git repository.<br>
+I brought the git repo to the container with a volme in the <span class="command">docker run</span> command.<br>
+Now I can use its local path <span class="command">/var/pipelines</span> (jenkins is also enabled for local repos from last post).<br>
+---<br>
+</div><br>
+this step is taking a name as an argument and prints it<br>
+---
+<div class="underline">basicStep</div>
+<div class="file">
+def call(name) {<br>
+	<div class="tab2">
+	echo "This is basic step - called from shared lib - its argument is name: ${name}"<br>
+	echo "Doing ls"<br>
+	sh("ls -l")<br>
+	</div><br>
+}<br>
+</div><br>
+this step is taking a name as an argument and prints it<br>
+---
+<div class="underline">readme</div>
+<div class="file">
+def call() {<br>
+	<div class="tab2">
+	echo "getting into readme"<br>
+	config=readYaml file:'/var/configfiles/myfile.yaml'<br>
+	echo "variable value: ${config.field1.field2.field3}"<br>
+	</div><br>
+}<br>
+
+</div><br>
+This step is reading configfile.yaml and prints the value:<br>
+<span class="command">field1.field2.field3</span><br>
+---
+<div class="underline">execme</div>
+<div class="file">
+def call(some) {<br>
+	<div class="tab2">
+	config=readYaml file:'/var/configfiles/myfile.yaml'<br>
+	commands=config.command<br>
+	for (en in commands) {<br>
+	<div class="tab3">
+		en.each { itr -&gt;<br>
+			<div class="tab4">
+			sh "$itr.value"<br>
+			</div><br>
+		}<br>
+		</div><br>	
+	}<br>
+	</div><br>
+}<br>
+</div><br>
+Take the commands part from the yaml file - which is a list of maps.<br>
+It maps <span class="command">exe</span> to a command.<br>
+So Going over the list of command and using <span class="command">sh</span> jenkins directive to execute them.<br>
+---
+<div class=underline>Jenkins file - using steps loaded</div>
+<div class="file">
+basicStep 'input2'<br>
+readme()<br>
+execme()
+</div><br>
+<span class="names1">basicStep</span> - one of the steps loaded with shared library.<br>
+It loads a variable - In this case printing an argument given to it<br>
+<span class="names1">readme()</span> - I have to call it as the function because its not getting an argument.<br>
+It reads the value: config.field1.field2.field3, from a yaml file that looks like this:<br>
+<div class="file">
+field1:<br>
+<div class="tab1">
+  field2:<br>
+  <div class="tab1">
+     field3: "somevalue"<br>
+	</div>
+</div><br>
+command:<br>
+- exe: "touch file1"<br>
+- exe: "touch file2"<br>
+- exe: "ls -l"<br>
+- exe: "pwd"<br>
+</div><br>
+<span class="names1">exeme()</span> - Exeute the commands - that are in list in the yaml file under the name "exe"<br><br>
+Afterall of this you should get:<br>
+basicStep output:<br>
+<img src="../img/sharedLib.basicStep.output.png"><br>
+readme output:<br>
+<img src="../img/sharedLib.readme.output.png"><br>
+execme output:<br>
+<img src="../img/sharedLib.exeme.png"><br><br>
+<hr>
+This was a very basic usage of using shared lib to load steps written by you to your jenkins pipeline.<br>
+From here you can take it and use whatever Groovy has to offer to create much more complex pipelines.<br>
+Enjoy!
